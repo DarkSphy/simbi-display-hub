@@ -492,7 +492,7 @@ function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
       <form onSubmit={salvar} className="bg-surface border border-border p-8 rounded-3xl shadow-sm space-y-6">
         
         <div className="grid grid-cols-2 gap-6 mb-6 pb-6 border-b border-border">
-          <ImageUpload label="Logo da Loja" value={form?.logo_url} onChange={(url) => setForm({...form, logo_url: url})} />
+          <ImageUpload label="Logo da Loja (Recomendado: 400x400px)" value={form?.logo_url} onChange={(url) => setForm({...form, logo_url: url})} />
           <ImageUpload label="Capa do CatÃ¡logo" value={form?.capa_url} onChange={(url) => setForm({...form, capa_url: url})} />
         </div>
 

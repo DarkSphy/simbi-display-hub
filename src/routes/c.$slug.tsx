@@ -149,7 +149,7 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
       const url = `https://wa.me/${catalogo.contato?.replace(/\D/g,'')}?text=${mensagem}`;
       clearCart(); setOpen(false); window.open(url, '_blank');
     } catch (err) {
-      alert("Erro ao enviar pedido.");
+      console.error("Erro no checkout:", err); alert("Erro ao enviar pedido. Verifique o console ou a estrutura da tabela pedidos.");
     } finally {
       setLoading(false);
     }
