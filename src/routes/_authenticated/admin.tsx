@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -8,10 +8,10 @@ import type { Catalogo, Produto } from "@/lib/produtos.functions";
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
-      { title: "Gestão do meu catálogo — simbi" },
-      { name: "description", content: "Personalize sua página e escolha o que aparece no seu link público." },
-      { property: "og:title", content: "Gestão do meu catálogo — simbi" },
-      { property: "og:description", content: "Personalize sua página e escolha o que aparece no seu link público." },
+      { title: "GestÃ£o do meu catÃ¡logo â€” simbi" },
+      { name: "description", content: "Personalize sua pÃ¡gina e escolha o que aparece no seu link pÃºblico." },
+      { property: "og:title", content: "GestÃ£o do meu catÃ¡logo â€” simbi" },
+      { property: "og:description", content: "Personalize sua pÃ¡gina e escolha o que aparece no seu link pÃºblico." },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -138,7 +138,7 @@ function Admin() {
       slug: gerarSlug(nome) || `catalogo-${Date.now()}`,
     });
     if (error) {
-      setErro(error.message.includes("duplicate") ? "Esse nome já está em uso. Tente outro." : error.message);
+      setErro(error.message.includes("duplicate") ? "Esse nome jÃ¡ estÃ¡ em uso. Tente outro." : error.message);
       return;
     }
     await catalogoQ.refetch();
@@ -165,7 +165,7 @@ function Admin() {
       .eq("id", catalogo.id);
     setSalvandoLoja(false);
     if (error) {
-      setErro(error.message.includes("duplicate") ? "Esse endereço de link já está em uso." : error.message);
+      setErro(error.message.includes("duplicate") ? "Esse endereÃ§o de link jÃ¡ estÃ¡ em uso." : error.message);
       return;
     }
     await catalogoQ.refetch();
@@ -256,7 +256,7 @@ function Admin() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-baseline gap-4">
             <span className="font-display text-2xl font-semibold tracking-tight">simbi</span>
-            <span className="hidden sm:inline eyebrow text-ink/45">área do produtor</span>
+            <span className="hidden sm:inline eyebrow text-ink/45">Ã¡rea do produtor</span>
           </div>
           <nav className="flex items-center gap-6 text-sm">
             {catalogo ? (
@@ -265,7 +265,7 @@ function Admin() {
                 params={{ slug: catalogo.slug }}
                 className="text-ink/50 hover:text-ink transition-colors"
               >
-                Ver meu catálogo
+                Ver meu catÃ¡logo
               </Link>
             ) : null}
             <button onClick={sair} className="font-medium bg-ink text-cream px-3.5 py-2 rounded-full text-sm">
@@ -279,19 +279,19 @@ function Admin() {
         {erro ? <p className="mb-6 text-sm text-destructive">{erro}</p> : null}
 
         {catalogoQ.isLoading ? (
-          <p className="text-sm text-ink/50">Carregando…</p>
+          <p className="text-sm text-ink/50">Carregandoâ€¦</p>
         ) : !catalogo ? (
           <form onSubmit={criarCatalogo} className="max-w-md">
             <p className="eyebrow text-clay mb-3">Primeiro passo</p>
             <h1 className="font-display text-3xl font-medium leading-tight text-balance">
-              Como o seu catálogo vai se chamar?
+              Como o seu catÃ¡logo vai se chamar?
             </h1>
             <p className="mt-3 text-sm text-ink/60">
-              Esse nome também vira o seu link público. Você pode ajustar tudo depois.
+              Esse nome tambÃ©m vira o seu link pÃºblico. VocÃª pode ajustar tudo depois.
             </p>
-            <input name="nome" required placeholder="Ex.: Sítio das Ervas" className={campoClasse} />
+            <input name="nome" required placeholder="Ex.: SÃ­tio das Ervas" className={campoClasse} />
             <button type="submit" className="mt-4 bg-ink text-cream rounded-full px-5 py-3 text-sm font-medium">
-              Criar meu catálogo
+              Criar meu catÃ¡logo
             </button>
           </form>
         ) : (
@@ -326,7 +326,7 @@ function Admin() {
 
             {loja ? (
               <form onSubmit={salvarLoja} className="rounded-2xl bg-cream ring-1 ring-black/5 p-6 mb-12">
-                <h2 className="font-display text-2xl font-medium">Identidade do catálogo</h2>
+                <h2 className="font-display text-2xl font-medium">Identidade do catÃ¡logo</h2>
                 <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
                   <label className="block">
                     <span className="eyebrow text-ink/45">Nome</span>
@@ -338,7 +338,7 @@ function Admin() {
                     />
                   </label>
                   <label className="block">
-                    <span className="eyebrow text-ink/45">Endereço do link (/c/…)</span>
+                    <span className="eyebrow text-ink/45">EndereÃ§o do link (/c/â€¦)</span>
                     <input
                       value={loja.slug}
                       onChange={(e) => setLoja({ ...loja, slug: e.target.value })}
@@ -346,7 +346,7 @@ function Admin() {
                     />
                   </label>
                   <label className="block md:col-span-2">
-                    <span className="eyebrow text-ink/45">Descrição</span>
+                    <span className="eyebrow text-ink/45">DescriÃ§Ã£o</span>
                     <textarea
                       rows={3}
                       value={loja.descricao}
@@ -371,7 +371,7 @@ function Admin() {
                     />
                   </label>
                   <label className="block">
-                    <span className="eyebrow text-ink/45">Horário de funcionamento</span>
+                    <span className="eyebrow text-ink/45">HorÃ¡rio de funcionamento</span>
                     <input
                       value={loja.horario}
                       onChange={(e) => setLoja({ ...loja, horario: e.target.value })}
@@ -379,7 +379,7 @@ function Admin() {
                     />
                   </label>
                   <label className="block">
-                    <span className="eyebrow text-ink/45">Contato (WhatsApp, e-mail…)</span>
+                    <span className="eyebrow text-ink/45">Contato (WhatsApp, e-mailâ€¦)</span>
                     <input
                       value={loja.contato}
                       onChange={(e) => setLoja({ ...loja, contato: e.target.value })}
@@ -404,14 +404,14 @@ function Admin() {
                       onChange={(e) => setLoja({ ...loja, publicado: e.target.checked })}
                       className="size-4 accent-sage"
                     />
-                    Catálogo publicado (visível para quem abrir o link)
+                    CatÃ¡logo publicado (visÃ­vel para quem abrir o link)
                   </label>
                   <button
                     type="submit"
                     disabled={salvandoLoja}
                     className="bg-ink text-cream rounded-full px-5 py-2.5 text-sm font-medium disabled:opacity-60"
                   >
-                    {salvandoLoja ? "Salvando…" : "Salvar identidade"}
+                    {salvandoLoja ? "Salvandoâ€¦" : "Salvar identidade"}
                   </button>
                 </div>
               </form>
@@ -421,16 +421,16 @@ function Admin() {
               <div className="col-span-12 md:col-span-4">
                 <p className="eyebrow text-clay mb-3">Produtos</p>
                 <h2 className="font-display text-3xl font-medium leading-tight text-balance max-w-[20ch]">
-                  O que aparece no catálogo, você decide
+                  O que aparece no catÃ¡logo, vocÃª decide
                 </h2>
                 <p className="mt-3 text-sm text-ink/60 text-pretty">
-                  {produtos.length} itens cadastrados · {visiveis} no seu link público.
+                  {produtos.length} itens cadastrados Â· {visiveis} no seu link pÃºblico.
                 </p>
                 <button
                   onClick={abrirNovo}
                   className="mt-5 inline-flex items-center gap-2 bg-clay text-cream text-sm font-medium px-4 py-2.5 rounded-full hover:bg-clay/90 transition-colors"
                 >
-                  <span className="text-base leading-none">＋</span> Novo produto
+                  <span className="text-base leading-none">ï¼‹</span> Novo produto
                 </button>
               </div>
 
@@ -439,12 +439,12 @@ function Admin() {
                   <div className="grid grid-cols-12 items-center gap-3 px-5 py-3 border-b border-ink/10 eyebrow text-ink/45">
                     <span className="col-span-4">Produto</span>
                     <span className="col-span-3">Categoria</span>
-                    <span className="col-span-2">Preço</span>
-                    <span className="col-span-3 text-right">Visível</span>
+                    <span className="col-span-2">PreÃ§o</span>
+                    <span className="col-span-3 text-right">VisÃ­vel</span>
                   </div>
 
                   {isLoading ? (
-                    <p className="px-5 py-8 text-sm text-ink/50">Carregando…</p>
+                    <p className="px-5 py-8 text-sm text-ink/50">Carregandoâ€¦</p>
                   ) : produtos.length === 0 ? (
                     <p className="px-5 py-8 text-sm text-ink/50">Nenhum produto cadastrado ainda.</p>
                   ) : (
@@ -466,7 +466,7 @@ function Admin() {
                             Editar
                           </button>
                           <button
-                            aria-label={p.visivel ? "Ocultar do catálogo" : "Publicar no catálogo"}
+                            aria-label={p.visivel ? "Ocultar do catÃ¡logo" : "Publicar no catÃ¡logo"}
                             onClick={() => alternarVisibilidade(p)}
                             className={`w-11 h-6 rounded-full relative transition-colors ${
                               p.visivel ? "bg-sage" : "bg-ink/20"
@@ -522,7 +522,7 @@ function Admin() {
                 </label>
 
                 <label className="block col-span-2">
-                  <span className="eyebrow text-ink/45">Descrição</span>
+                  <span className="eyebrow text-ink/45">DescriÃ§Ã£o</span>
                   <textarea
                     rows={3}
                     value={form.descricao}
@@ -545,13 +545,13 @@ function Admin() {
                   <input
                     value={form.medida}
                     onChange={(e) => setForm({ ...form, medida: e.target.value })}
-                    placeholder="1 kg, unidade…"
+                    placeholder="1 kg, unidadeâ€¦"
                     className={campoClasse}
                   />
                 </label>
 
                 <label className="block">
-                  <span className="eyebrow text-ink/45">Preço (R$)</span>
+                  <span className="eyebrow text-ink/45">PreÃ§o (R$)</span>
                   <input
                     value={form.preco}
                     onChange={(e) => setForm({ ...form, preco: e.target.value })}
@@ -578,7 +578,7 @@ function Admin() {
                     onChange={(e) => setForm({ ...form, visivel: e.target.checked })}
                     className="size-4 accent-sage"
                   />
-                  No catálogo
+                  No catÃ¡logo
                 </label>
                 <label className="flex items-center gap-2 text-sm">
                   <input
@@ -587,7 +587,7 @@ function Admin() {
                     onChange={(e) => setForm({ ...form, disponivel: e.target.checked })}
                     className="size-4 accent-sage"
                   />
-                  Disponível
+                  DisponÃ­vel
                 </label>
                 <label className="flex items-center gap-2 text-sm">
                   <input
@@ -626,3 +626,4 @@ function Admin() {
     </div>
   );
 }
+
