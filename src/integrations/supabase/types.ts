@@ -14,8 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      catalogos: {
+        Row: {
+          capa_url: string | null
+          contato: string
+          created_at: string
+          descricao: string
+          endereco: string
+          horario: string
+          id: string
+          logo_url: string | null
+          nome: string
+          publicado: boolean
+          slug: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          capa_url?: string | null
+          contato?: string
+          created_at?: string
+          descricao?: string
+          endereco?: string
+          horario?: string
+          id?: string
+          logo_url?: string | null
+          nome?: string
+          publicado?: boolean
+          slug: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          capa_url?: string | null
+          contato?: string
+          created_at?: string
+          descricao?: string
+          endereco?: string
+          horario?: string
+          id?: string
+          logo_url?: string | null
+          nome?: string
+          publicado?: boolean
+          slug?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       produtos: {
         Row: {
+          catalogo_id: string
           categoria: string
           created_at: string
           descricao: string
@@ -31,6 +80,7 @@ export type Database = {
           visivel: boolean
         }
         Insert: {
+          catalogo_id: string
           categoria?: string
           created_at?: string
           descricao?: string
@@ -46,6 +96,7 @@ export type Database = {
           visivel?: boolean
         }
         Update: {
+          catalogo_id?: string
           categoria?: string
           created_at?: string
           descricao?: string
@@ -60,7 +111,15 @@ export type Database = {
           updated_at?: string
           visivel?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "produtos_catalogo_id_fkey"
+            columns: ["catalogo_id"]
+            isOneToOne: false
+            referencedRelation: "catalogos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
