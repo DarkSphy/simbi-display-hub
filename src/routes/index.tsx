@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { Store, MessageCircle, BarChart3, ArrowRight } from "lucide-react";
 
 import { listarCatalogosPublicos } from "@/lib/produtos.functions";
 
@@ -12,160 +13,162 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(vitrineQuery),
   head: () => ({
     meta: [
-      { title: "simbi — o catálogo digital de quem vende comida de verdade" },
-      {
-        name: "description",
-        content:
-          "Crie um catálogo com a sua cara: logo, nome, horário e produtos frescos em um link só seu. Sem carrinho, sem taxa de entrega.",
-      },
-      { property: "og:title", content: "simbi — o catálogo digital de quem vende comida de verdade" },
-      {
-        property: "og:description",
-        content: "Um link só seu para mostrar produtos frescos, com logo, horário e contato do seu jeito.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { title: "simbi — Plataforma de Vendas e Catálogos" },
+      { name: "description", content: "Crie seu catálogo digital, receba pedidos no WhatsApp e gerencie vendas em um painel completo." },
     ],
   }),
-  errorComponent: () => (
-    <div className="min-h-screen grid place-items-center px-6 text-center">
-      <p className="font-display text-2xl">Não conseguimos abrir a página agora.</p>
-    </div>
-  ),
   component: Home,
 });
-
-const passos = [
-  {
-    numero: "01",
-    titulo: "Monte a sua página",
-    texto: "Logo, nome, descrição, horário de funcionamento e contato — tudo com a identidade do seu negócio.",
-  },
-  {
-    numero: "02",
-    titulo: "Cadastre o que está fresco",
-    texto: "Foto, medida, preço e um texto curto. Publique ou guarde cada item com um toque.",
-  },
-  {
-    numero: "03",
-    titulo: "Compartilhe o seu link",
-    texto: "Um endereço exclusivo para colar na bio, no grupo do bairro ou na etiqueta da caixa.",
-  },
-];
 
 function Home() {
   const { data: catalogos } = useSuspenseQuery(vitrineQuery);
 
   return (
-    <div className="min-h-screen bg-cream text-ink font-body">
-      <header className="border-b border-ink/10">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-          <div className="flex items-baseline gap-4">
-            <span className="font-display text-2xl font-semibold tracking-tight">simbi</span>
-            <span className="hidden sm:inline eyebrow text-ink/45">catálogos de produtos vivos</span>
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white">
+      {/* Navbar */}
+      <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="size-8 rounded-lg bg-primary grid place-items-center">
+              <Store className="text-white size-5" />
+            </div>
+            <span className="font-display font-bold text-2xl tracking-tight">simbi</span>
           </div>
-          <nav className="flex items-center gap-6 text-sm">
-            <a href="#como-funciona" className="hidden sm:inline text-ink/50 hover:text-ink transition-colors">
-              Como funciona
-            </a>
-            <Link to="/admin" className="font-medium bg-ink text-cream px-3.5 py-2 rounded-full text-sm">
-              Área do produtor
-            </Link>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="#funcionalidades" className="text-muted-foreground hover:text-foreground transition">Funcionalidades</a>
+            <a href="#vitrine" className="text-muted-foreground hover:text-foreground transition">Explorar Catálogos</a>
           </nav>
+          <div className="flex items-center gap-4">
+            <Link to="/auth" className="hidden sm:block text-sm font-semibold hover:text-primary transition">Entrar</Link>
+            <Link to="/auth" className="bg-primary hover:bg-brand-hover text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-soft transition-all hover:-translate-y-0.5">
+              Criar Catálogo Grátis
+            </Link>
+          </div>
         </div>
       </header>
 
-      <section>
-        <div className="max-w-6xl mx-auto px-6 pt-16 pb-14 grid grid-cols-12 gap-8 items-end">
-          <div className="col-span-12 lg:col-span-7">
-            <p className="eyebrow text-clay mb-4">Um link, o seu jeito de mostrar</p>
-            <h1 className="font-display font-medium text-[56px] leading-[0.95] tracking-tight text-balance max-w-[15ch]">
-              Cada produtor com o <em className="italic font-normal text-clay">seu</em> catálogo
-            </h1>
-            <p className="mt-6 text-pretty text-ink/65 max-w-[48ch]">
-              A simbi dá a quem faz comida de verdade uma página própria: logo, nome, horário e a lista do que está
-              fresco hoje. Nada congelado, nada de carrinho — só o seu produto bem apresentado, no seu endereço.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link to="/auth" className="bg-ink text-cream rounded-full px-6 py-3.5 text-sm font-medium">
-                Criar meu catálogo
-              </Link>
-              {catalogos[0] ? (
-                <Link
-                  to="/c/$slug"
-                  params={{ slug: catalogos[0].slug }}
-                  className="text-sm underline underline-offset-4 decoration-ink/30 hover:decoration-clay"
-                >
-                  Ver um catálogo real
-                </Link>
-              ) : null}
-            </div>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden pt-24 pb-32">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
+        
+        <div className="max-w-7xl mx-auto px-6 text-center flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border text-sm font-medium mb-8">
+            <span className="flex size-2 rounded-full bg-primary animate-pulse" />
+            A nova forma de vender online
           </div>
-          <div className="col-span-12 lg:col-span-5">
-            <div className="rounded-2xl bg-linen ring-1 ring-black/5 p-2">
-              <img
-                src="/images/hero.jpg"
-                alt="Pão de fermentação natural, cavala fresca, ervas e azeite sobre linho"
-                width={1024}
-                height={640}
-                className="w-full aspect-[16/10] object-cover rounded-xl"
-              />
+          
+          <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight max-w-[18ch] leading-[1.1]">
+            Tudo o que você precisa para vender <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-pink-500">mais e melhor.</span>
+          </h1>
+          
+          <p className="mt-6 text-lg text-muted-foreground max-w-2xl">
+            Crie um catálogo digital personalizado, permita que seus clientes comprem com um Carrinho integrado ao WhatsApp e gerencie tudo em um Dashboard super completo.
+          </p>
+          
+          <div className="mt-10 flex flex-wrap justify-center items-center gap-4">
+            <Link to="/auth" className="bg-primary hover:bg-brand-hover text-white px-8 py-4 rounded-full font-semibold shadow-lg shadow-primary/30 transition-all hover:-translate-y-1 flex items-center gap-2">
+              Começar Agora <ArrowRight size={18} />
+            </Link>
+            <a href="#funcionalidades" className="bg-surface hover:bg-secondary border border-border px-8 py-4 rounded-full font-semibold transition-all">
+              Ver Funcionalidades
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Bento Grid Features */}
+      <section id="funcionalidades" className="py-24 bg-surface">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl font-bold tracking-tight">Um sistema completo. Sem complicação.</h2>
+            <p className="mt-4 text-muted-foreground">Venda produtos frescos, físicos ou serviços com uma experiência premium.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 bg-background border border-border rounded-3xl p-10 overflow-hidden relative group hover:border-primary/50 transition-colors">
+              <div className="relative z-10 max-w-md">
+                <div className="size-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6">
+                  <Store size={24} />
+                </div>
+                <h3 className="font-display text-2xl font-bold mb-3">Catálogo com a sua Cara</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">Personalize nome, cores, logo e capa. Seu cliente terá uma experiência de loja oficial, em um link próprio (ex: /c/sua-loja).</p>
+              </div>
+            </div>
+
+            <div className="bg-background border border-border rounded-3xl p-10 relative group hover:border-primary/50 transition-colors">
+              <div className="size-12 bg-sage/10 text-sage rounded-2xl flex items-center justify-center mb-6">
+                <MessageCircle size={24} />
+              </div>
+              <h3 className="font-display text-2xl font-bold mb-3">Checkout no WhatsApp</h3>
+              <p className="text-muted-foreground">O cliente monta o carrinho e o pedido chega pronto e formatado direto no seu número.</p>
+            </div>
+
+            <div className="md:col-span-3 bg-foreground text-background rounded-3xl p-10 md:p-14 flex flex-col md:flex-row items-center justify-between gap-10">
+              <div className="max-w-xl">
+                <div className="size-12 bg-white/10 text-white rounded-2xl flex items-center justify-center mb-6">
+                  <BarChart3 size={24} />
+                </div>
+                <h3 className="font-display text-3xl font-bold mb-4">Painel Administrativo Completo</h3>
+                <p className="text-white/70 text-lg">Acompanhe faturamento, controle status dos pedidos, veja a base de clientes e atualize produtos em tempo real. Uma visão 360° do seu negócio.</p>
+              </div>
+              <div className="flex-1 w-full flex justify-end">
+                <div className="w-full max-w-sm bg-white/5 rounded-2xl border border-white/10 p-6 backdrop-blur-md">
+                  <div className="h-4 w-1/3 bg-white/20 rounded-full mb-6" />
+                  <div className="space-y-4">
+                    {[1,2,3].map(i => (
+                      <div key={i} className="flex gap-4 items-center">
+                        <div className="size-10 bg-white/10 rounded-lg" />
+                        <div className="flex-1 space-y-2">
+                          <div className="h-2.5 w-3/4 bg-white/20 rounded-full" />
+                          <div className="h-2.5 w-1/2 bg-white/10 rounded-full" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="como-funciona" className="border-y border-ink/10 bg-paper scroll-mt-20">
-        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
-          {passos.map((passo) => (
-            <div key={passo.numero}>
-              <span className="font-display text-4xl text-clay">{passo.numero}</span>
-              <h2 className="mt-3 font-display text-2xl font-medium leading-tight">{passo.titulo}</h2>
-              <p className="mt-2 text-sm text-ink/60 text-pretty">{passo.texto}</p>
+      {/* Showcase */}
+      <section id="vitrine" className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <h2 className="font-display text-4xl font-bold tracking-tight">Quem já usa a simbi</h2>
+              <p className="mt-2 text-muted-foreground">Catálogos incríveis criados pelos nossos vendedores.</p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <div className="max-w-6xl mx-auto px-6 py-16">
-          <div className="flex items-baseline justify-between gap-4 pb-6 border-b border-ink/10">
-            <h2 className="font-display text-3xl font-medium">Catálogos na simbi</h2>
-            <span className="eyebrow text-ink/40">{catalogos.length} produtores</span>
           </div>
 
           {catalogos.length === 0 ? (
-            <p className="font-display text-2xl text-ink/50 py-14">
-              Ainda não há catálogos publicados. O primeiro pode ser o seu.
-            </p>
+            <div className="bg-surface border border-border rounded-3xl p-16 text-center">
+              <p className="text-xl font-medium text-muted-foreground">Seja o primeiro a criar um catálogo!</p>
+            </div>
           ) : (
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {catalogos.map((c) => (
                 <Link
                   key={c.slug}
                   to="/c/$slug"
                   params={{ slug: c.slug }}
-                  className="bg-paper rounded-2xl ring-1 ring-black/5 p-6 hover:ring-clay/40 transition-colors"
+                  className="group bg-surface border border-border rounded-3xl p-6 hover:shadow-soft hover:border-primary/30 transition-all block"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-4 mb-4">
                     {c.logo_url ? (
-                      <img
-                        src={c.logo_url}
-                        alt={`Logo ${c.nome}`}
-                        loading="lazy"
-                        width={44}
-                        height={44}
-                        className="size-11 rounded-full object-cover ring-1 ring-ink/10"
-                      />
+                      <img src={c.logo_url} alt={c.nome} className="size-14 rounded-2xl object-cover shadow-sm" />
                     ) : (
-                      <span className="size-11 rounded-full bg-linen grid place-items-center font-display text-lg">
+                      <div className="size-14 rounded-2xl bg-secondary text-foreground font-display text-xl font-bold grid place-items-center">
                         {c.nome.slice(0, 1).toUpperCase()}
-                      </span>
+                      </div>
                     )}
-                    <span className="font-display text-xl font-medium">{c.nome}</span>
+                    <div>
+                      <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors">{c.nome}</h3>
+                      <p className="text-sm text-primary font-medium mt-0.5">/c/{c.slug}</p>
+                    </div>
                   </div>
-                  <p className="mt-3 text-sm text-ink/60 text-pretty line-clamp-3">{c.descricao}</p>
-                  <span className="mt-4 inline-block eyebrow text-clay">/c/{c.slug}</span>
+                  <p className="text-muted-foreground text-sm line-clamp-2">{c.descricao || "Sem descrição"}</p>
                 </Link>
               ))}
             </div>
@@ -173,14 +176,17 @@ function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-ink/10 bg-paper">
-        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-wrap items-baseline justify-between gap-4">
-          <p className="font-display text-2xl max-w-[24ch] text-balance">
-            Sua comida merece uma página tão boa quanto ela.
-          </p>
-          <Link to="/auth" className="bg-clay text-cream rounded-full px-6 py-3 text-sm font-medium">
-            Começar agora
-          </Link>
+      {/* Footer */}
+      <footer className="bg-surface border-t border-border py-12">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-2">
+            <Store className="text-primary size-6" />
+            <span className="font-display font-bold text-xl">simbi</span>
+          </div>
+          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} Simbi. O poder nas mãos de quem vende.</p>
+          <div className="flex gap-4">
+            <Link to="/auth" className="text-sm font-medium hover:text-primary">Admin</Link>
+          </div>
         </div>
       </footer>
     </div>

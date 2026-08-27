@@ -5,8 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Simbi — sistema de design "artesanal editorial".
- * Paleta em oklch, tipografia Fraunces (display) + Space Grotesk (texto).
+ * Simbi — Design System SaaS Moderno (Inspirado no ClickUp)
  */
 
 @theme inline {
@@ -29,6 +28,11 @@
   --color-paper: var(--paper);
   --color-linen: var(--linen);
 
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -48,41 +52,46 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
 }
 
 :root {
-  --radius: 0.875rem;
+  --radius: 0.75rem;
 
-  --font-family-display: "Fraunces", Georgia, serif;
-  --font-family-body: "Space Grotesk", system-ui, sans-serif;
+  --font-family-display: "Outfit", system-ui, sans-serif;
+  --font-family-body: "Inter", system-ui, sans-serif;
 
-  --ink: oklch(0.245 0.018 62);
-  --clay: oklch(0.585 0.115 44);
-  --sage: oklch(0.545 0.048 118);
-  --cream: oklch(0.935 0.021 82);
-  --paper: oklch(0.968 0.012 85);
-  --linen: oklch(0.895 0.028 84);
+  /* ClickUp inspired colors */
+  --ink: #292D34; /* Dark slate */
+  --clay: #7B68EE; /* Vibrant purple */
+  --sage: #00D394; /* Green success */
+  --cream: #FFFFFF; /* Pure white */
+  --paper: #F8F9FA; /* Light gray */
+  --linen: #F0F2F5; /* Border/hover gray */
 
-  --background: var(--cream);
-  --foreground: var(--ink);
-  --card: var(--paper);
-  --card-foreground: var(--ink);
-  --popover: var(--paper);
-  --popover-foreground: var(--ink);
-  --primary: var(--ink);
-  --primary-foreground: var(--cream);
-  --secondary: var(--linen);
-  --secondary-foreground: var(--ink);
-  --muted: var(--linen);
-  --muted-foreground: oklch(0.5 0.015 62);
-  --accent: var(--clay);
-  --accent-foreground: var(--cream);
-  --destructive: oklch(0.55 0.19 28);
-  --destructive-foreground: oklch(0.98 0.005 85);
-  --border: oklch(0.245 0.018 62 / 12%);
-  --input: oklch(0.245 0.018 62 / 14%);
-  --ring: var(--clay);
+  --brand: #7B68EE;
+  --brand-hover: #6650D8;
+  --surface: #FFFFFF;
+  --surface-hover: #F8F9FA;
+
+  --background: #F8F9FA;
+  --foreground: #292D34;
+  --card: #FFFFFF;
+  --card-foreground: #292D34;
+  --popover: #FFFFFF;
+  --popover-foreground: #292D34;
+  --primary: #7B68EE;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E9EBF0;
+  --secondary-foreground: #292D34;
+  --muted: #E9EBF0;
+  --muted-foreground: #7C828D;
+  --accent: #F0F2F5;
+  --accent-foreground: #7B68EE;
+  --destructive: #F95246;
+  --destructive-foreground: #FFFFFF;
+  --border: #E9EBF0;
+  --input: #E9EBF0;
+  --ring: #7B68EE;
 }
 
 @layer base {
@@ -98,13 +107,27 @@
   }
 
   ::selection {
-    background-color: color-mix(in oklab, var(--clay) 22%, transparent);
+    background-color: var(--brand);
+    color: white;
   }
 }
 
 @utility eyebrow {
-  font-size: 11px;
-  line-height: 1.4;
+  font-size: 12px;
+  line-height: 1.5;
   text-transform: uppercase;
-  letter-spacing: 0.25em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+@utility glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+@utility shadow-soft {
+  box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
 }
