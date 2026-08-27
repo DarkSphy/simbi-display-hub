@@ -35,7 +35,11 @@ function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
       setCarregando(false);
       if (error) {
-        setErro("Não foi possível entrar. Confira o e-mail e a senha.");
+        setErro(
+          error.message.toLowerCase().includes("not confirmed")
+            ? "Sua conta ainda não foi confirmada. Tente novamente em instantes."
+            : "Não foi possível entrar. Confira o e-mail e a senha.",
+        );
         return;
       }
       navigate({ to: "/admin" });
