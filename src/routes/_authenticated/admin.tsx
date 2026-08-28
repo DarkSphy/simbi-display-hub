@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -112,9 +112,9 @@ function AdminLayout() {
 
         <div className="px-4 py-3 flex items-center justify-between border-t border-border">
           <div className="flex items-center gap-1">
-            <button onClick={() => setZoomPercent(value => Math.max(70, value - 10))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
+            <button type="button" onClick={(e) => { e.preventDefault(); setZoomPercent(value => Math.max(70, value - 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
             <span className="text-xs font-bold font-mono w-9 text-center text-muted-foreground">{zoomPercent}%</span>
-            <button onClick={() => setZoomPercent(value => Math.min(130, value + 10))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
+            <button type="button" onClick={(e) => { e.preventDefault(); setZoomPercent(value => Math.min(130, value + 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
           </div>
           <div className="w-px h-4 bg-border mx-1"></div>
           <button onClick={() => setIsDark(!isDark)} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Alternar Tema">
