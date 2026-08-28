@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -23,11 +23,11 @@ export type Database = {
           descricao: string
           endereco: string
           horario: string
+          horarios_funcionamento: Json | null
           id: string
           logo_url: string | null
-          horarios_funcionamento: any | null
-          permitir_agendamento: boolean | null
           nome: string
+          permitir_agendamento: boolean | null
           publicado: boolean
           slug: string
           updated_at: string
@@ -41,11 +41,11 @@ export type Database = {
           descricao?: string
           endereco?: string
           horario?: string
+          horarios_funcionamento?: Json | null
           id?: string
           logo_url?: string | null
-          horarios_funcionamento?: any | null
-          permitir_agendamento?: boolean | null
           nome?: string
+          permitir_agendamento?: boolean | null
           publicado?: boolean
           slug: string
           updated_at?: string
@@ -59,11 +59,11 @@ export type Database = {
           descricao?: string
           endereco?: string
           horario?: string
+          horarios_funcionamento?: Json | null
           id?: string
           logo_url?: string | null
-          horarios_funcionamento?: any | null
-          permitir_agendamento?: boolean | null
           nome?: string
+          permitir_agendamento?: boolean | null
           publicado?: boolean
           slug?: string
           updated_at?: string
@@ -76,8 +76,6 @@ export type Database = {
           cor_principal: string | null
           id: string
           logo_url: string | null
-          horarios_funcionamento: any | null
-          permitir_agendamento: boolean | null
           mensagem_rodape: string | null
           nome_loja: string
           whatsapp: string
@@ -86,8 +84,6 @@ export type Database = {
           cor_principal?: string | null
           id?: string
           logo_url?: string | null
-          horarios_funcionamento?: any | null
-          permitir_agendamento?: boolean | null
           mensagem_rodape?: string | null
           nome_loja?: string
           whatsapp?: string
@@ -96,8 +92,6 @@ export type Database = {
           cor_principal?: string | null
           id?: string
           logo_url?: string | null
-          horarios_funcionamento?: any | null
-          permitir_agendamento?: boolean | null
           mensagem_rodape?: string | null
           nome_loja?: string
           whatsapp?: string
@@ -106,6 +100,7 @@ export type Database = {
       }
       pedidos: {
         Row: {
+          agendado: boolean | null
           catalogo_id: string | null
           cliente_endereco: string
           cliente_nome: string
@@ -113,11 +108,11 @@ export type Database = {
           created_at: string
           id: string
           itens: Json
-          agendado: boolean | null
           status: string
           total: number
         }
         Insert: {
+          agendado?: boolean | null
           catalogo_id?: string | null
           cliente_endereco: string
           cliente_nome: string
@@ -125,11 +120,11 @@ export type Database = {
           created_at?: string
           id?: string
           itens: Json
-          agendado: boolean | null
           status?: string
           total: number
         }
         Update: {
+          agendado?: boolean | null
           catalogo_id?: string | null
           cliente_endereco?: string
           cliente_nome?: string
@@ -137,7 +132,6 @@ export type Database = {
           created_at?: string
           id?: string
           itens?: Json
-          agendado?: boolean | null
           status?: string
           total?: number
         }
