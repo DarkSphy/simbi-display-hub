@@ -170,11 +170,11 @@ export function ViewProdutos({ catalogo }: { catalogo: any }) {
               <div className="flex-1 space-y-1.5">
                 <span className="text-sm font-bold text-muted-foreground block">Tipo de Venda</span>
                 <div className="flex gap-4">
-                  <label className={lex-1 flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors \}>
+                  <label className={`flex flex-1 cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors ${form.tipo_venda === "unidade" || !form.tipo_venda ? "border-primary bg-primary/10 text-primary" : "border-border bg-background"}`}>
                     <input type="radio" name="tipo" value="unidade" checked={form.tipo_venda === 'unidade' || !form.tipo_venda} onChange={() => setForm({...form, tipo_venda: 'unidade'})} className="hidden"/>
                     <Package size={20}/> <span className="font-bold">Por Unidade</span>
                   </label>
-                  <label className={lex-1 flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-colors \}>
+                  <label className={`flex flex-1 cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors ${form.tipo_venda === "peso" ? "border-primary bg-primary/10 text-primary" : "border-border bg-background"}`}>
                     <input type="radio" name="tipo" value="peso" checked={form.tipo_venda === 'peso'} onChange={() => setForm({...form, tipo_venda: 'peso'})} className="hidden"/>
                     <Weight size={20}/> <span className="font-bold">Por Peso (Kg/g)</span>
                   </label>
@@ -206,7 +206,7 @@ export function ViewProdutos({ catalogo }: { catalogo: any }) {
                 {(form.modo_preparo || []).map((passo: string, idx: number) => (
                   <div key={idx} className="flex gap-3">
                     <div className="bg-secondary rounded-xl w-10 flex items-center justify-center font-bold text-sm shrink-0">{idx + 1}</div>
-                    <input value={passo} onChange={(e) => updatePasso(idx, e.target.value)} placeholder={Descreva o passo \...} className="flex-1 border rounded-xl p-2 outline-none focus:border-primary bg-background"/>
+                    <input value={passo} onChange={(e) => updatePasso(idx, e.target.value)} placeholder={`Descreva o passo ${idx + 1}...`} className="flex-1 border rounded-xl p-2 outline-none focus:border-primary bg-background"/>
                     <button type="button" onClick={() => removePasso(idx)} className="text-destructive hover:bg-destructive/10 p-2 rounded-lg"><X size={18}/></button>
                   </div>
                 ))}

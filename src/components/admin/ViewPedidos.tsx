@@ -1,7 +1,7 @@
 ﻿import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Search, Filter, CheckCircle2, Loader2, Calendar } from "lucide-react";
-import { listarPedidos, atualizarStatusPedido } from @/lib/pedidos.functions;
+import { listarPedidos, atualizarStatusPedido } from "@/lib/pedidos.functions";
 import { format, isToday, isYesterday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -105,7 +105,7 @@ export function ViewPedidos() {
                           </td>
                           <td className="p-4 text-sm text-muted-foreground">
                             <div className="max-w-[300px] truncate" title={p.itens.map((i:any) => i.quantidade + 'x ' + i.nome).join(", ")}>
-                              {p.itens.map((i:any) => \x \).join(", ")}
+                              {p.itens.map((i:any) => `${i.quantidade}x ${i.nome}`).join(", ")}
                             </div>
                           </td>
                           <td className="p-4 font-bold text-foreground whitespace-nowrap">{moeda(p.total)}</td>
@@ -117,7 +117,7 @@ export function ViewPedidos() {
                                   await atualizarStatusPedido(p.id, e.target.value);
                                   queryClient.invalidateQueries({queryKey: ["pedidos"]});
                                 }}
-                                className={	ext-xs font-bold px-4 py-2 rounded-full border outline-none appearance-none cursor-pointer pr-8 \}
+                                className={`cursor-pointer appearance-none rounded-full border px-4 py-2 pr-8 text-xs font-bold outline-none ${p.status === "entregue" ? "border-sage/30 bg-sage/10 text-sage" : p.status === "cancelado" ? "border-destructive/30 bg-destructive/10 text-destructive" : "border-primary/30 bg-primary/10 text-primary"}`}
                               >
                                 <option value="pendente">Pendente</option>
                                 <option value="confirmado">Confirmado</option>
