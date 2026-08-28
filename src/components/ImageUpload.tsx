@@ -1,6 +1,6 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Loader2, Plus, X } from "lucide-react";
-import { uploadImagem } from "@/lib/upload.functions";
+import { uploadImagem } from "@/lib/storage.functions";
 
 export function ImageUpload({ label, value, onChange }: { label: string, value: string, onChange: (url: string) => void }) {
   const [loading, setLoading] = useState(false);
