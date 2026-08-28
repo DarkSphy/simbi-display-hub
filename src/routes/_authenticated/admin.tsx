@@ -1,4 +1,4 @@
-﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,10 +45,14 @@ function AdminLayout() {
       let next = prev + change;
       if (next < 20) next = 20;
       if (next > 200) next = 200;
-      try {
-        localStorage.setItem('simbi_zoom', next.toString());
-        document.documentElement.style.fontSize = `${(next / 100) * 16}px`;
-      } catch(e) {}
+      // We schedule the side effect OUTSIDE the updater by doing it asynchronously
+      // or we can just rely on useEffect, but direct is fine if we defer it.
+      setTimeout(() => {
+        try {
+          localStorage.setItem('simbi_zoom', next.toString());
+          document.documentElement.style.fontSize = `${(next / 100) * 16}px`;
+        } catch(e) {}
+      }, 0);
       return next;
     });
   }, []);
@@ -56,11 +60,13 @@ function AdminLayout() {
   const toggleTheme = useCallback(() => {
     setTheme(prev => {
       const next = prev === 'light' ? 'dark' : 'light';
-      if (next === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+      setTimeout(() => {
+        if (next === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }, 0);
       return next;
     });
   }, []);
