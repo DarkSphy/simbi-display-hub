@@ -98,18 +98,18 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'hsl(var(--muted-foreground))', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: 'hsl(var(--muted-foreground))', fontSize: 12}} tickFormatter={(value) => `R$ ${value}`} dx={-10}/>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} tickFormatter={(value) => `R$ ${value}`} dx={-10}/>
                 <Tooltip 
-                  contentStyle={{ backgroundColor: 'hsl(var(--surface))', borderRadius: '12px', border: '1px solid hsl(var(--border))', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  itemStyle={{ color: 'hsl(var(--foreground))', fontWeight: 'bold' }}
+                  contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
                 />
-                <Area type="monotone" dataKey="vendas" stroke="hsl(var(--primary))" strokeWidth={3} fillOpacity={1} fill="url(#colorVendas)" />
+                <Area type="monotone" dataKey="vendas" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorVendas)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -120,16 +120,16 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={clientsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'hsl(var(--muted-foreground))', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: 'hsl(var(--muted-foreground))', fontSize: 12}} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} />
                 <Tooltip 
-                  cursor={{fill: 'hsl(var(--secondary))'}}
-                  contentStyle={{ backgroundColor: 'hsl(var(--surface))', borderRadius: '12px', border: '1px solid hsl(var(--border))' }}
+                  cursor={{fill: 'var(--secondary)'}}
+                  contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)' }}
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }}/>
-                <Bar dataKey="Novos" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} barSize={40} />
-                <Bar dataKey="Recorrentes" fill="hsl(var(--sage))" radius={[8, 8, 0, 0]} barSize={40} />
+                <Bar dataKey="Novos" fill="var(--primary)" radius={[8, 8, 0, 0]} barSize={40} />
+                <Bar dataKey="Recorrentes" fill="var(--sage)" radius={[8, 8, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>

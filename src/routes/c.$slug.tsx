@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ShoppingBag, Search, ExternalLink, Menu, X, MessageCircle, ChevronLeft, ChevronRight, Info, Minus, Plus, Package, Weight } from "lucide-react";
@@ -323,7 +323,7 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
       const mensagem = `Olá! Gostaria de fazer o seguinte pedido:\n\n${msgItens}\n\nTotal: *${moeda(total)}*\n\n*Meus dados:*\nNome: ${nome}\nWhatsApp: ${whatsapp}\nEndereço: ${endereco}`;
       const numeroContato = String(catalogo.contato ?? "").replace(/\D/g, "");
       const url = `https://wa.me/${numeroContato}?text=${encodeURIComponent(mensagem)}`;
-      clearCart(); setOpen(false); window.open(url, '_blank');
+      clearCart(); setOpen(false); window.location.href = url;
     } catch (err) {
       console.error("Erro no checkout:", err); toast.error("Erro ao enviar pedido. A loja precisa configurar o sistema.");
     } finally {
