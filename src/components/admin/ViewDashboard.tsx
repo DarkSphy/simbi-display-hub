@@ -1,8 +1,7 @@
 ﻿import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo } from "react";
 import { Store, ShoppingBag, Clock, Users, Target } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 
 const moeda = (valor: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
 
@@ -50,31 +49,11 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
     map.forEach(qty => {
       if (qty > 1) recorrentes++; else novos++;
     });
-    return [
-      { name: 'Novos', value: novos, color: '#8E7CFF' },
-      { name: 'Recorrentes', value: recorrentes, color: '#10B981' }
-    ];
+    return { novos, recorrentes, total: novos + recorrentes };
   }, [pedidos]);
 
-  // Custom Resize Observer to bypass Recharts crash
-  const containerArea = useRef<HTMLDivElement>(null);
-  const containerPie = useRef<HTMLDivElement>(null);
-  const [areaWidth, setAreaWidth] = useState(600);
-  const [pieWidth, setPieWidth] = useState(300);
-
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      window.requestAnimationFrame(() => {
-        for (const entry of entries) {
-          if (entry.target === containerArea.current) setAreaWidth(Math.max(300, entry.contentRect.width));
-          if (entry.target === containerPie.current) setPieWidth(Math.max(200, entry.contentRect.width));
-        }
-      });
-    });
-    if (containerArea.current) resizeObserver.observe(containerArea.current);
-    if (containerPie.current) resizeObserver.observe(containerPie.current);
-    return () => resizeObserver.disconnect();
-  }, []);
+  const maxVendas = Math.max(...chartData.map(d => d.vendas), 1);
+  const pctNovos = clientsData.total > 0 ? (clientsData.novos / clientsData.total) * 100 : 0;
 
   return (
     <div className="space-y-6 pb-12 w-full">
@@ -120,60 +99,67 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
             <div className="size-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center"><Users size={24}/></div>
             <p className="font-semibold text-muted-foreground">Fidelização</p>
           </div>
-          <p className="font-display text-3xl font-bold text-foreground relative z-10">{clientsData.find(c => c.name === 'Recorrentes')?.value ?? 0} <span className="text-lg text-muted-foreground font-medium">fiéis</span></p>
+          <p className="font-display text-3xl font-bold text-foreground relative z-10">{clientsData.recorrentes} <span className="text-lg text-muted-foreground font-medium">fiéis</span></p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-surface border border-border rounded-3xl p-8 shadow-sm">
-          <h3 className="font-bold text-xl mb-6">Desempenho de Vendas (7 Dias)</h3>
-          <div ref={containerArea} className="w-full relative min-h-[300px]">
-            <AreaChart width={areaWidth} height={300} data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-              <defs>
-                <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
-              <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} tickFormatter={(value) => `R$ ${value}`} dx={-10}/>
-              <Tooltip 
-                contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
-                formatter={(value: any) => [moeda(Number(value)), 'Vendas']}
-              />
-              <Area type="monotone" dataKey="vendas" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorVendas)" />
-            </AreaChart>
+        <div className="lg:col-span-2 bg-surface border border-border rounded-3xl p-8 shadow-sm flex flex-col justify-between">
+          <h3 className="font-bold text-xl mb-2">Desempenho de Vendas (7 Dias)</h3>
+          
+          <div className="flex items-end justify-between h-[250px] w-full mt-8 gap-1 sm:gap-3">
+            {chartData.map(day => {
+              const heightPercent = day.vendas > 0 ? (day.vendas / maxVendas) * 100 : 2;
+              return (
+                <div key={day.name} className="flex flex-col items-center flex-1 h-full group">
+                  <div className="w-full relative h-full flex items-end justify-center">
+                    <div 
+                      className="w-full max-w-[48px] bg-primary/20 group-hover:bg-primary transition-all duration-300 rounded-t-lg relative flex flex-col justify-end"
+                      style={{ height: `${heightPercent}%` }}
+                    >
+                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-foreground text-background font-bold text-xs px-3 py-1.5 rounded-lg shadow-xl whitespace-nowrap z-10 pointer-events-none">
+                        {moeda(day.vendas)}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-xs sm:text-sm font-medium text-muted-foreground mt-3">{day.name}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        <div className="bg-surface border border-border rounded-3xl p-8 shadow-sm">
-          <h3 className="font-bold text-xl mb-6">Novos vs Recorrentes</h3>
-          <div ref={containerPie} className="w-full flex flex-col items-center relative min-h-[300px]">
+        <div className="bg-surface border border-border rounded-3xl p-8 shadow-sm flex flex-col">
+          <h3 className="font-bold text-xl mb-6 text-center">Novos vs Recorrentes</h3>
+          <div className="w-full flex-1 flex flex-col items-center justify-center">
             {pedidos.length === 0 ? (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
+              <div className="text-muted-foreground font-medium">Sem dados ainda</div>
             ) : (
               <>
-                <PieChart width={pieWidth} height={220}>
-                  <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value" nameKey="name">
-                    {clientsData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                    itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
-                  />
-                </PieChart>
-                <div className="flex justify-center gap-8 mt-2">
-                  {clientsData.map(c => (
-                    <div key={c.name} className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-xl">
-                      <div className="size-3 rounded-full" style={{ backgroundColor: c.color }} />
-                      <span className="text-sm font-medium text-muted-foreground">{c.name}:</span>
-                      <span className="font-bold text-foreground text-lg">{c.value}</span>
+                <div className="relative size-48 md:size-56 rounded-full flex items-center justify-center shadow-md transition-all duration-500 hover:scale-105" 
+                     style={{ background: `conic-gradient(#8E7CFF ${pctNovos}%, #10B981 ${pctNovos}% 100%)` }}>
+                  <div className="absolute bg-surface w-36 h-36 md:w-40 md:h-40 rounded-full shadow-inner flex flex-col items-center justify-center">
+                    <span className="text-3xl font-display font-bold text-foreground">{clientsData.total}</span>
+                    <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Clientes</span>
+                  </div>
+                </div>
+                
+                <div className="flex justify-center gap-4 sm:gap-8 mt-10 w-full">
+                  <div className="flex flex-col items-center gap-1 bg-secondary/50 px-4 py-2 rounded-2xl flex-1 max-w-[120px]">
+                    <div className="flex items-center gap-2">
+                      <div className="size-3 rounded-full bg-[#8E7CFF]" />
+                      <span className="text-xs font-bold text-muted-foreground uppercase">Novos</span>
                     </div>
-                  ))}
+                    <span className="font-bold text-foreground text-xl">{clientsData.novos}</span>
+                  </div>
+                  
+                  <div className="flex flex-col items-center gap-1 bg-secondary/50 px-4 py-2 rounded-2xl flex-1 max-w-[120px]">
+                    <div className="flex items-center gap-2">
+                      <div className="size-3 rounded-full bg-[#10B981]" />
+                      <span className="text-xs font-bold text-muted-foreground uppercase">Fiéis</span>
+                    </div>
+                    <span className="font-bold text-foreground text-xl">{clientsData.recorrentes}</span>
+                  </div>
                 </div>
               </>
             )}
