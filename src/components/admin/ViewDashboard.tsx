@@ -1,4 +1,4 @@
-﻿import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { Store, ShoppingBag, Clock, Users, Target } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
@@ -39,8 +39,8 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
       if (qty > 1) recorrentes++; else novos++;
     });
     return [
-      { name: 'Novos', value: novos, color: 'var(--primary)' },
-      { name: 'Recorrentes', value: recorrentes, color: 'var(--sage)' }
+      { name: 'Novos', value: novos, color: '#8E7CFF' },
+      { name: 'Recorrentes', value: recorrentes, color: '#10B981' }
     ];
   }, [pedidos]);
 
@@ -121,18 +121,22 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
           <h3 className="font-bold text-xl mb-6">Novos vs Recorrentes</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value">
-                  {clientsData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip 
-                  contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
-                />
-                <Legend iconType="circle" verticalAlign="bottom" height={36}/>
-              </PieChart>
+              {pedidos.length === 0 ? (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
+              ) : (
+                <PieChart>
+                  <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value" nameKey="name" label={({ name, value }) => `${value}`}>
+                    {clientsData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                    itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+                  />
+                  <Legend iconType="circle" verticalAlign="bottom" height={36}/>
+                </PieChart>
+              )}
             </ResponsiveContainer>
           </div>
         </div>

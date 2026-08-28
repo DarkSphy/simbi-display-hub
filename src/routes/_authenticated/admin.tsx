@@ -1,4 +1,4 @@
-﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,10 +28,14 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminLayout() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("painel");
-  const [zoomPercent, setZoomPercent] = useState(100);
+  const [zoomPercent, setZoomPercent] = useState(() => {
+    const saved = localStorage.getItem('simbi_zoom');
+    return saved ? parseInt(saved, 10) : 100;
+  });
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
+    localStorage.setItem('simbi_zoom', zoomPercent.toString());
     document.documentElement.style.fontSize = `${(zoomPercent / 100) * 16}px`;
   }, [zoomPercent]);
 
@@ -112,9 +116,9 @@ function AdminLayout() {
 
         <div className="px-4 py-3 flex items-center justify-between border-t border-border">
           <div className="flex items-center gap-1">
-            <button type="button" onClick={(e) => { e.preventDefault(); setZoomPercent(value => Math.max(70, value - 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
+            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setZoomPercent(Math.max(70, zoomPercent - 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
             <span className="text-xs font-bold font-mono w-9 text-center text-muted-foreground">{zoomPercent}%</span>
-            <button type="button" onClick={(e) => { e.preventDefault(); setZoomPercent(value => Math.min(130, value + 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
+            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setZoomPercent(Math.min(130, zoomPercent + 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
           </div>
           <div className="w-px h-4 bg-border mx-1"></div>
           <button onClick={() => setIsDark(!isDark)} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Alternar Tema">
