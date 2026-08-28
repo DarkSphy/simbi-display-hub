@@ -12,6 +12,16 @@ import { ViewClientes } from "@/components/admin/ViewClientes";
 import { ViewConfiguracoes } from "@/components/admin/ViewConfiguracoes";
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  head: () => ({
+    meta: [
+      { title: "Painel | Simbi" },
+      { name: "description", content: "Gerencie seu catálogo, produtos, pedidos e configurações na Simbi." },
+      { property: "og:title", content: "Painel | Simbi" },
+      { property: "og:description", content: "Gerencie seu catálogo, produtos, pedidos e configurações na Simbi." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: AdminLayout,
 });
 
@@ -102,9 +112,9 @@ function AdminLayout() {
 
         <div className="px-4 py-3 flex items-center justify-between border-t border-border">
           <div className="flex items-center gap-1">
-            <button onClick={() => setZoomLevel(z => Math.max(0.7, z - 0.1))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
-            <span className="text-xs font-bold font-mono w-9 text-center text-muted-foreground">{Math.round(zoomLevel * 100)}%</span>
-            <button onClick={() => setZoomLevel(z => Math.min(1.3, z + 0.1))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
+            <button onClick={() => setZoomPercent(value => Math.max(70, value - 10))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
+            <span className="text-xs font-bold font-mono w-9 text-center text-muted-foreground">{zoomPercent}%</span>
+            <button onClick={() => setZoomPercent(value => Math.min(130, value + 10))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
           </div>
           <div className="w-px h-4 bg-border mx-1"></div>
           <button onClick={() => setIsDark(!isDark)} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Alternar Tema">
@@ -135,6 +145,3 @@ function AdminLayout() {
     </div>
   );
 }
-
-// O lucide-react "ExternalLink" estava faltando no topo, vou consertar.
-// Mas o código usa import { ..., ExternalLink } ... não estava no bloco. Resolverei.
