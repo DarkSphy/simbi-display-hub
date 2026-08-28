@@ -1,8 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut, LayoutDashboard, ShoppingBag, Users, Settings, PackageOpen, Store, ExternalLink } from "lucide-react";
+import { LogOut, LayoutDashboard, ShoppingBag, Users, Settings, PackageOpen, Store, ExternalLink, ZoomIn, ZoomOut, Moon, Sun } from "lucide-react";
 import { Toaster } from "sonner";
 
 import { ViewDashboard } from "@/components/admin/ViewDashboard";
@@ -18,6 +18,17 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminLayout() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("painel");
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.style.fontSize = `${zoomLevel * 16}px`;
+  }, [zoomLevel]);
+
+  useEffect(() => {
+    if (isDark) document.documentElement.classList.add('dark');
+    else document.documentElement.classList.remove('dark');
+  }, [isDark]);
 
   const { data: session } = useQuery({
     queryKey: ["session"],
@@ -87,6 +98,17 @@ function AdminLayout() {
           })}
         </nav>
 
+        <div className="px-4 py-3 flex items-center justify-between border-t border-border">
+          <div className="flex items-center gap-1">
+            <button onClick={() => setZoomLevel(z => Math.max(0.7, z - 0.1))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
+            <span className="text-xs font-bold font-mono w-9 text-center text-muted-foreground">{Math.round(zoomLevel * 100)}%</span>
+            <button onClick={() => setZoomLevel(z => Math.min(1.3, z + 0.1))} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
+          </div>
+          <div className="w-px h-4 bg-border mx-1"></div>
+          <button onClick={() => setIsDark(!isDark)} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Alternar Tema">
+            {isDark ? <Sun size={18}/> : <Moon size={18}/>}
+          </button>
+        </div>
         <div className="p-4 border-t border-border mt-auto">
           <a href={linkPublico} target="_blank" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all font-semibold w-full">
             <ExternalLink size={20} className="opacity-70" />

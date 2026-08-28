@@ -1,4 +1,4 @@
-@import "tailwindcss" source(none);
+﻿@import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
 
@@ -130,4 +130,28 @@
 
 @utility shadow-soft {
   box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+}
+
+.dark {
+  --background: #1A1D21;
+  --foreground: #F8F9FA;
+  --surface: #22252A;
+  --surface-hover: #292D34;
+  --card: #22252A;
+  --card-foreground: #F8F9FA;
+  --popover: #22252A;
+  --popover-foreground: #F8F9FA;
+  --primary: #8E7CFF;
+  --primary-foreground: #FFFFFF;
+  --secondary: #292D34;
+  --secondary-foreground: #F8F9FA;
+  --muted: #292D34;
+  --muted-foreground: #9CA3AF;
+  --accent: #292D34;
+  --accent-foreground: #8E7CFF;
+  --destructive: #F95246;
+  --destructive-foreground: #FFFFFF;
+  --border: #292D34;
+  --input: #292D34;
+  --ring: #8E7CFF;
 }
