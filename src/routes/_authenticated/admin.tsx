@@ -28,11 +28,14 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminLayout() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("painel");
-  const [zoomPercent, setZoomPercent] = useState(() => {
-    const saved = localStorage.getItem('simbi_zoom');
-    return saved ? parseInt(saved, 10) : 100;
-  });
+  const [zoomPercent, setZoomPercent] = useState(100);
   const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('simbi_zoom');
+    const parsed = saved ? Number.parseInt(saved, 10) : 100;
+    if (Number.isFinite(parsed)) setZoomPercent(parsed);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('simbi_zoom', zoomPercent.toString());
@@ -147,6 +150,7 @@ function AdminLayout() {
           {activeTab === 'produtos' && <ViewProdutos catalogo={catalogo} />}
           {activeTab === 'clientes' && <ViewClientes />}
           {activeTab === 'configuracoes' && <ViewConfiguracoes catalogo={catalogo} reload={() => queryClient.invalidateQueries({ queryKey: ["meu-catalogo"] })} />}
+          </div>
         </div>
       </main>
     </div>
