@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { LogOut, LayoutDashboard, ShoppingBag, Users, Settings, PackageOpen, Store, ExternalLink, ZoomIn, ZoomOut, Moon, Sun } from "lucide-react";
@@ -29,6 +29,8 @@ function AdminLayout() {
     if (isDark) document.documentElement.classList.add('dark');
     else document.documentElement.classList.remove('dark');
   }, [isDark]);
+
+  const queryClient = useQueryClient();
 
   const { data: session } = useQuery({
     queryKey: ["session"],
@@ -127,7 +129,7 @@ function AdminLayout() {
           {activeTab === 'pedidos' && <ViewPedidos />}
           {activeTab === 'produtos' && <ViewProdutos catalogo={catalogo} />}
           {activeTab === 'clientes' && <ViewClientes />}
-          {activeTab === 'configuracoes' && <ViewConfiguracoes catalogo={catalogo} />}
+          {activeTab === 'configuracoes' && <ViewConfiguracoes catalogo={catalogo} reload={() => queryClient.invalidateQueries({ queryKey: ["meu-catalogo"] })} />}
         </div>
       </main>
     </div>

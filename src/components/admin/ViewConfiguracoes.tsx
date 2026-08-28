@@ -38,12 +38,33 @@ function ImageUpload({ label, value, onChange }: { label: string, value: string,
   );
 }
 
-export function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
+export function ViewConfiguracoes({ catalogo, reload }: any) {
   const [salvando, setSalvando] = useState(false);
+  const [form, setForm] = useState<any>(() => {
+    const padrao: any = {};
+    for (let i = 0; i < 7; i++) padrao[i] = { ativo: true, abre: '18:00', fecha: '23:00' };
+    return { ...catalogo, horarios_funcionamento: catalogo?.horarios_funcionamento ?? padrao };
+  });
+
   const salvar = async (e: React.FormEvent) => {
     e.preventDefault(); setSalvando(true);
-    await supabase.from("catalogos").update(form).eq("id", catalogo.id);
-    setSalvando(false); reload(); alert("Salvo com sucesso!");
+    const payload = {
+      nome: form.nome,
+      descricao: form.descricao ?? '',
+      logo_url: form.logo_url || null,
+      capa_url: form.capa_url || null,
+      contato: form.contato ?? '',
+      endereco: form.endereco ?? '',
+      horario: form.horario ?? '',
+      categorias_padrao: form.categorias_padrao ?? [],
+      horarios_funcionamento: form.horarios_funcionamento ?? null,
+      permitir_agendamento: !!form.permitir_agendamento,
+    };
+    const { error } = await supabase.from("catalogos").update(payload).eq("id", catalogo.id);
+    setSalvando(false);
+    if (error) { alert("Erro ao salvar: " + error.message); return; }
+    reload?.();
+    alert("Salvo com sucesso!");
   };
 
   return (
