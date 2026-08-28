@@ -31,7 +31,9 @@ function AdminLayout() {
     queryKey: ["meu-catalogo", session?.user?.id],
     enabled: !!session?.user?.id,
     queryFn: async () => {
-      const { data, error } = await supabase.from("catalogos").select("*").eq("user_id", session!.user.id).single();
+      const userId = session?.user?.id;
+      if (!userId) return null;
+      const { data, error } = await supabase.from("catalogos").select("*").eq("user_id", userId).single();
       if (error && error.code !== 'PGRST116') throw error;
       return data;
     }

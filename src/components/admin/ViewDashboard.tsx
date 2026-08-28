@@ -86,7 +86,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
             <div className="size-12 rounded-2xl bg-blue-500/10 text-blue-500 flex items-center justify-center"><Users size={24}/></div>
             <p className="font-semibold text-muted-foreground">Fidelização</p>
           </div>
-          <p className="font-display text-3xl font-bold text-foreground relative z-10">{clientsData[0].Recorrentes} <span className="text-lg text-muted-foreground font-medium">fiéis</span></p>
+          <p className="font-display text-3xl font-bold text-foreground relative z-10">{clientsData[0]?.Recorrentes ?? 0} <span className="text-lg text-muted-foreground font-medium">fiéis</span></p>
         </div>
       </div>
 

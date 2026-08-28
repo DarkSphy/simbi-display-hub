@@ -29,8 +29,9 @@ export function ViewPedidos() {
     if (isToday(dataObj)) label = "Hoje";
     else if (isYesterday(dataObj)) label = "Ontem";
 
-    if (!acc[label]) acc[label] = [];
-    acc[label].push(p);
+    const pedidosDoDia = acc[label] ?? [];
+    pedidosDoDia.push(p);
+    acc[label] = pedidosDoDia;
     return acc;
   }, {} as Record<string, any[]>);
 
