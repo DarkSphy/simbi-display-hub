@@ -366,7 +366,7 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
       if (error) throw error;
       const msgItens = items.map((item) => `- ${item.quantidade}x ${item.nome} (${moeda(Number(item.preco) * item.quantidade)})`).join("\n");
       const textoIntro = isAgendamento ? 'Olá! Gostaria de AGENDAR o seguinte pedido para quando a loja abrir' : 'Olá! Gostaria de fazer o seguinte pedido';
-      const mensagem = `\:\n\n${msgItens}\n\nTotal: *${moeda(total)}*\n\n*Meus dados:*\nNome: ${nome}\nWhatsApp: ${whatsapp}\nEndereço: ${endereco}`;
+      const mensagem = `${textoIntro}:\n\n${msgItens}\n\nTotal: *${moeda(total)}*\n\n*Meus dados:*\nNome: ${nome}\nWhatsApp: ${whatsapp}\nEndereço: ${endereco}`;
       const numeroContato = String(catalogo.contato ?? "").replace(/\D/g, "");
       const url = `https://wa.me/${numeroContato}?text=${encodeURIComponent(mensagem)}`;
       clearCart(); setOpen(false); window.location.href = url;
@@ -424,7 +424,7 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
                       <Clock size={22}/> A Loja está fechada no momento
                     </div>
                   ) : (
-                  <button disabled={loading} type="submit" className={w-full p-5 rounded-2xl text-white font-bold flex justify-center items-center gap-3 mt-6 shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-transform active:scale-95 disabled:opacity-50 text-lg \}>
+                  <button disabled={loading} type="submit" className={`w-full p-5 rounded-2xl text-white font-bold flex justify-center items-center gap-3 mt-6 shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-transform active:scale-95 disabled:opacity-50 text-lg ${isAgendamento ? 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/40' : 'bg-primary hover:bg-brand-hover shadow-primary/40'}`}>
                     {loading ? "Enviando..." : isAgendamento ? <><CalendarClock size={22}/> Agendar via WhatsApp</> : <><MessageCircle size={22}/> Finalize o pedido enviando para o WhatsApp</>}
                   </button>
                   )}

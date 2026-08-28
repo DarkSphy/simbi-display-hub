@@ -59,119 +59,21 @@ export function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
         <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
           <div className="mb-6 pb-4 border-b border-border">
             <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><ImageIcon size={22} className="text-primary"/> Identidade Visual</h3>
-            <p className="text-sm text-muted-foreground mt-1">Imagens que representam sua marca. Faça upload dos arquivos.</p>
+            <p className="text-sm text-muted-foreground mt-1">Sua marca no mundo. Escolha imagens bonitas para encantar os clientes.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-3 bg-background p-6 rounded-2xl border border-border">
-              <ImageUpload label="Logo da Loja" value={form?.logo_url} onChange={(url) => setForm({...form, logo_url: url})} />
-              <p className="text-xs text-muted-foreground bg-secondary p-3 rounded-lg">Recomendado: Imagem quadrada (ex: 400x400px ou 500x500px). Aparece no topo e nas redes sociais.</p>
-            </div>
-            <div className="space-y-3 bg-background p-6 rounded-2xl border border-border">
-              <ImageUpload label="Banner de Fundo (Capa)" value={form?.capa_url} onChange={(url) => setForm({...form, capa_url: url})} />
-              <p className="text-xs text-muted-foreground bg-secondary p-3 rounded-lg">Recomendado: 1920x1080px (horizontal) para Computadores, adaptável para Celulares. Fica atrás da sua logo.</p>
-            </div>
+          <div className="flex flex-col sm:flex-row gap-8">
+            <ImageUpload label="Logo da Loja (Recomendado: 400x400)" value={form?.logo_url||''} onChange={url=>setForm({...form,logo_url:url})} />
+            <ImageUpload label="Capa do Catálogo (Recomendado: 1200x400)" value={form?.capa_url||''} onChange={url=>setForm({...form,capa_url:url})} />
           </div>
         </section>
 
-        {/* Informações da Loja */}
+        {/* Informações Principais */}
         <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
           <div className="mb-6 pb-4 border-b border-border">
             <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><Store size={22} className="text-primary"/> Informações Principais</h3>
             <p className="text-sm text-muted-foreground mt-1">Os dados que aparecem na página inicial da loja para seus clientes.</p>
           </div>
-        {/* Horários de Funcionamento */}
-        <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
-          <div className="mb-6 pb-4 border-b border-border">
-            <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><Store size={22} className="text-primary"/> Horário de Funcionamento</h3>
-            <p className="text-sm text-muted-foreground mt-1">Defina quando sua loja está aberta para receber pedidos.</p>
-          </div>
-          
-          <div className="space-y-4 mb-6">
-            {['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'].map((dia, idx) => {
-              const h = (form?.horarios_funcionamento || {})[idx] || { ativo: true, abre: '18:00', fecha: '23:00' };
-              return (
-                <div key={idx} className={lex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border transition-colors \}>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={h.ativo} className="size-5 rounded border-border text-primary focus:ring-primary" onChange={(e) => {
-                      const newH = { ...(form?.horarios_funcionamento || {}) };
-                      newH[idx] = { ...h, ativo: e.target.checked };
-                      setForm({...form, horarios_funcionamento: newH});
-                    }}/>
-                    <span className="font-bold w-24">{dia}</span>
-                  </label>
-                  
-                  <div className="flex items-center gap-3">
-                    <input type="time" disabled={!h.ativo} value={h.abre} onChange={(e) => {
-                      const newH = { ...(form?.horarios_funcionamento || {}) };
-                      newH[idx] = { ...h, abre: e.target.value };
-                      setForm({...form, horarios_funcionamento: newH});
-                    }} className="border border-border rounded-lg px-3 py-2 bg-surface outline-none focus:border-primary disabled:opacity-50"/>
-                    <span className="text-muted-foreground font-medium">até</span>
-                    <input type="time" disabled={!h.ativo} value={h.fecha} onChange={(e) => {
-                      const newH = { ...(form?.horarios_funcionamento || {}) };
-                      newH[idx] = { ...h, fecha: e.target.value };
-                      setForm({...form, horarios_funcionamento: newH});
-                    }} className="border border-border rounded-lg px-3 py-2 bg-surface outline-none focus:border-primary disabled:opacity-50"/>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="p-5 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h4 className="font-bold text-foreground">Permitir Agendamentos?</h4>
-              <p className="text-sm text-muted-foreground mt-1">Se ativado, clientes podem fazer pedidos mesmo fora do horário (serão marcados como agendados). Se desativado, o carrinho será bloqueado fora do horário.</p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer shrink-0">
-              <input type="checkbox" className="sr-only peer" checked={form?.permitir_agendamento || false} onChange={e => setForm({...form, permitir_agendamento: e.target.checked})} />
-              <div className="w-14 h-7 bg-secondary peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
-            </label>
-          </div>
-        </section>
-
-        {/* Categorias */}
-        <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
-          <div className="mb-6 pb-4 border-b border-border">
-            <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><Store size={22} className="text-primary"/> Categorias da Loja</h3>
-            <p className="text-sm text-muted-foreground mt-1">Crie categorias para facilitar o cadastro de produtos depois.</p>
-          </div>
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-2">
-              {(form?.categorias_padrao || []).map((cat: string, i: number) => (
-                <div key={i} className="bg-secondary text-foreground px-4 py-2 rounded-xl flex items-center gap-2 font-medium">
-                  {cat}
-                  <button type="button" onClick={() => {
-                    const newCats = [...(form.categorias_padrao || [])];
-                    newCats.splice(i, 1);
-                    setForm({...form, categorias_padrao: newCats});
-                  }} className="text-muted-foreground hover:text-destructive"><X size={16}/></button>
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-2 max-w-sm">
-              <input id="new-cat" placeholder="Nova categoria..." className="flex-1 border rounded-xl p-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all bg-background text-base" onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  const val = (e.target as HTMLInputElement).value.trim();
-                  if (val && !(form?.categorias_padrao || []).includes(val)) {
-                    setForm({...form, categorias_padrao: [...(form?.categorias_padrao || []), val]});
-                    (e.target as HTMLInputElement).value = '';
-                  }
-                }
-              }}/>
-              <button type="button" onClick={() => {
-                const input = document.getElementById('new-cat') as HTMLInputElement;
-                const val = input.value.trim();
-                if (val && !(form?.categorias_padrao || []).includes(val)) {
-                  setForm({...form, categorias_padrao: [...(form?.categorias_padrao || []), val]});
-                  input.value = '';
-                }
-              }} className="bg-secondary text-foreground px-4 rounded-xl font-bold hover:bg-border transition-colors">Adicionar</button>
-            </div>
-          </div>
-        </section>
 
           <div className="space-y-6">
             <label className="block">
@@ -186,12 +88,6 @@ export function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
           </div>
         </section>
 
-        {/* Atendimento */}
-        <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
-          <div className="mb-6 pb-4 border-b border-border">
-            <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><Phone size={22} className="text-primary"/> Atendimento</h3>
-            <p className="text-sm text-muted-foreground mt-1">Como os clientes entrarão em contato para finalizar pedidos e tirar dúvidas.</p>
-          </div>
         {/* Horários de Funcionamento */}
         <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
           <div className="mb-6 pb-4 border-b border-border">
@@ -203,7 +99,7 @@ export function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
             {['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'].map((dia, idx) => {
               const h = (form?.horarios_funcionamento || {})[idx] || { ativo: true, abre: '18:00', fecha: '23:00' };
               return (
-                <div key={idx} className={lex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border transition-colors \}>
+                <div key={idx} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border transition-colors ${h.ativo ? 'bg-background border-border' : 'bg-secondary/50 border-transparent opacity-60'}`}>
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input type="checkbox" checked={h.ativo} className="size-5 rounded border-border text-primary focus:ring-primary" onChange={(e) => {
                       const newH = { ...(form?.horarios_funcionamento || {}) };
@@ -284,6 +180,13 @@ export function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
             </div>
           </div>
         </section>
+
+        {/* Atendimento */}
+        <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
+          <div className="mb-6 pb-4 border-b border-border">
+            <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><Phone size={22} className="text-primary"/> Atendimento</h3>
+            <p className="text-sm text-muted-foreground mt-1">Como os clientes entrarão em contato para finalizar pedidos e tirar dúvidas.</p>
+          </div>
 
           <div className="space-y-6">
             <label className="block max-w-md">
