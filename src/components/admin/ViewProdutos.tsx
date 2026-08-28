@@ -1,8 +1,8 @@
-﻿import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Plus, Search, Loader2, Package, Weight, X, Image as ImageIcon } from "lucide-react";
-import { ImageUpload } from "@/components/ImageUpload";
+import { ImageUpload, MultipleImageUpload } from "@/components/ImageUpload";
 import { toast } from "sonner";
 
 const moeda = (valor: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
@@ -85,8 +85,9 @@ export function ViewProdutos({ catalogo }: any) {
           </div>
           
           <div className="flex flex-col md:flex-row gap-8">
-            <div className="w-full md:w-1/3 shrink-0">
-              <ImageUpload label="Foto do Produto" value={form.imagem_url || ''} onChange={url => setForm({...form, imagem_url: url})} />
+            <div className="w-full md:w-1/3 shrink-0 space-y-6">
+              <ImageUpload label="Foto Principal do Produto" value={form.imagem_url || ''} onChange={url => setForm({...form, imagem_url: url})} />
+              <MultipleImageUpload label="Galeria de Fotos (Opcional)" values={form.galeria || []} onChange={urls => setForm({...form, galeria: urls})} />
             </div>
             
             <div className="flex-1 space-y-6">
