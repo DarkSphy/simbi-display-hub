@@ -6,7 +6,7 @@ export async function uploadImagem(file: File): Promise<string> {
 
   const { error: uploadError } = await supabase.storage
     .from("imagens")
-    .upload(fileName, file, { upsert: false, contentType: file.type || undefined });
+    .upload(fileName, file, { upsert: false, contentType: file.type || "application/octet-stream" });
 
   if (uploadError) {
     console.error("Erro no upload:", uploadError);
