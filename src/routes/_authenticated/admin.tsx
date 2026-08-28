@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -121,6 +121,19 @@ function AdminLayout() {
         </nav>
 
         <div className="p-4 border-t border-border mt-auto">
+          {/* CONTROLES DE INTERFACE (MOVidos DE VOLTA PARA A SIDEBAR COMO ANTES) */}
+          <div className="flex items-center gap-3 bg-secondary/50 px-4 py-2 rounded-2xl mb-2">
+            <span className="text-sm font-semibold text-muted-foreground mr-1">Zoom:</span>
+            <button type="button" onClick={() => setZoomPercent(prev => Math.max(20, prev - 10))} className="p-1.5 text-muted-foreground hover:bg-background hover:text-foreground rounded-lg transition-colors bg-background/50 border border-border shadow-sm"><ZoomOut size={16}/></button>
+            <span className="text-sm font-bold font-mono w-10 text-center text-foreground">{zoomPercent}%</span>
+            <button type="button" onClick={() => setZoomPercent(prev => Math.min(200, prev + 10))} className="p-1.5 text-muted-foreground hover:bg-background hover:text-foreground rounded-lg transition-colors bg-background/50 border border-border shadow-sm"><ZoomIn size={16}/></button>
+          </div>
+          
+          <button type="button" onClick={() => setIsDark(prev => !prev)} className="flex items-center justify-center gap-2 bg-secondary/50 px-4 py-2.5 rounded-2xl text-sm font-bold text-muted-foreground hover:text-foreground transition-all w-full mb-4">
+            {isDark ? <Sun size={18} className="text-amber-500"/> : <Moon size={18} className="text-primary"/>}
+            {isDark ? 'Ativar Modo Claro' : 'Ativar Modo Escuro'}
+          </button>
+
           <a href={linkPublico} target="_blank" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all font-semibold w-full">
             <ExternalLink size={20} className="opacity-70" />
             Ver Loja
@@ -133,19 +146,6 @@ function AdminLayout() {
       </aside>
 
       <main className="flex-1 md:ml-64 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-50 bg-surface border-b border-border p-4 flex flex-wrap justify-end items-center gap-4">
-          <div className="flex items-center gap-3 bg-background border border-border px-4 py-2 rounded-2xl shadow-sm">
-            <span className="text-sm font-semibold text-muted-foreground mr-1">Zoom:</span>
-            <button type="button" onClick={() => setZoomPercent(prev => Math.max(20, prev - 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomOut size={18}/></button>
-            <span className="text-sm font-bold font-mono w-12 text-center text-primary">{zoomPercent}%</span>
-            <button type="button" onClick={() => setZoomPercent(prev => Math.min(200, prev + 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomIn size={18}/></button>
-          </div>
-          <button type="button" onClick={() => setIsDark(prev => !prev)} className="flex items-center gap-2 bg-background border border-border px-4 py-2.5 rounded-2xl shadow-sm text-sm font-bold text-muted-foreground hover:text-foreground transition-all">
-            {isDark ? <Sun size={18} className="text-amber-500"/> : <Moon size={18} className="text-primary"/>}
-            {isDark ? 'Modo Claro' : 'Modo Escuro'}
-          </button>
-        </header>
-
         <div className="p-4 sm:p-8 md:p-12 flex-1">
           <div className="max-w-6xl mx-auto">
           {activeTab === 'painel' && <ViewDashboard linkPublico={linkPublico} />}
