@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, useMemo } from "react";
 import { 
   Store, LayoutDashboard, ShoppingBag, Search, Users, Settings, 
-  LogOut, Plus, ChevronRight, ExternalLink, Menu, X, CheckCircle2, Clock, UploadCloud, Loader2
+  LogOut, Plus, ChevronRight, ExternalLink, Menu, X, CheckCircle2, Clock, UploadCloud, Loader2, ImageIcon, Phone
 } from "lucide-react";
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar 
@@ -487,22 +487,73 @@ function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
   };
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <header className="mb-6"><h2 className="font-display text-3xl font-bold">Configurações</h2><p className="text-muted-foreground mt-1">Identidade e contatos da sua loja.</p></header>
-      <form onSubmit={salvar} className="bg-surface border border-border p-8 rounded-3xl shadow-sm space-y-6">
-        
-        <div className="grid grid-cols-2 gap-6 mb-6 pb-6 border-b border-border">
-          <ImageUpload label="Logo da Loja (Recomendado: 400x400px)" value={form?.logo_url} onChange={(url) => setForm({...form, logo_url: url})} />
-          <ImageUpload label="Capa do Catálogo" value={form?.capa_url} onChange={(url) => setForm({...form, capa_url: url})} />
-        </div>
+    <div className="space-y-8 max-w-4xl pb-12 w-full">
+      <header className="mb-8">
+        <h2 className="font-display text-3xl font-bold">Configurações</h2>
+        <p className="text-muted-foreground mt-2">Personalize a identidade visual da sua loja, contatos e informações públicas.</p>
+      </header>
 
-        <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Nome do Catálogo</span><input required value={form?.nome||''} onChange={e=>setForm({...form,nome:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
-        <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">WhatsApp para Pedidos</span><input required value={form?.contato||''} onChange={e=>setForm({...form,contato:e.target.value})} placeholder="5511999999999" className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
-        <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Descrição</span><textarea value={form?.descricao||''} onChange={e=>setForm({...form,descricao:e.target.value})} rows={3} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
+      <form onSubmit={salvar} className="space-y-8">
         
-        <button disabled={salvando} type="submit" className="bg-primary text-white px-6 py-3.5 rounded-xl font-bold hover:bg-brand-hover w-full shadow-sm">
-          {salvando ? "Salvando..." : "Salvar Alterações"}
-        </button>
+        {/* Identidade Visual */}
+        <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
+          <div className="mb-6 pb-4 border-b border-border">
+            <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><ImageIcon size={22} className="text-primary"/> Identidade Visual</h3>
+            <p className="text-sm text-muted-foreground mt-1">Imagens que representam sua marca. Faça upload dos arquivos.</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-3 bg-background p-6 rounded-2xl border border-border">
+              <ImageUpload label="Logo da Loja" value={form?.logo_url} onChange={(url) => setForm({...form, logo_url: url})} />
+              <p className="text-xs text-muted-foreground bg-secondary p-3 rounded-lg">Recomendado: Imagem quadrada (ex: 400x400px ou 500x500px). Aparece no topo e nas redes sociais.</p>
+            </div>
+            <div className="space-y-3 bg-background p-6 rounded-2xl border border-border">
+              <ImageUpload label="Banner de Fundo (Capa)" value={form?.capa_url} onChange={(url) => setForm({...form, capa_url: url})} />
+              <p className="text-xs text-muted-foreground bg-secondary p-3 rounded-lg">Recomendado: 1920x1080px (horizontal) para Computadores, adaptável para Celulares. Fica atrás da sua logo.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Informações da Loja */}
+        <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
+          <div className="mb-6 pb-4 border-b border-border">
+            <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><Store size={22} className="text-primary"/> Informações Principais</h3>
+            <p className="text-sm text-muted-foreground mt-1">Os dados que aparecem na página inicial da loja para seus clientes.</p>
+          </div>
+          <div className="space-y-6">
+            <label className="block">
+              <span className="text-sm font-bold text-foreground mb-1.5 block">Nome do Negócio</span>
+              <input required value={form?.nome||''} onChange={e=>setForm({...form,nome:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all bg-background text-base"/>
+            </label>
+            
+            <label className="block">
+              <span className="text-sm font-bold text-foreground mb-1.5 block">Descrição da Loja</span>
+              <textarea value={form?.descricao||''} onChange={e=>setForm({...form,descricao:e.target.value})} rows={3} className="w-full border rounded-xl p-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all bg-background text-base" placeholder="Conte um pouco sobre o que você vende, seus diferenciais..."/>
+            </label>
+          </div>
+        </section>
+
+        {/* Atendimento */}
+        <section className="bg-surface border border-border p-8 rounded-3xl shadow-sm hover:shadow-soft transition-shadow">
+          <div className="mb-6 pb-4 border-b border-border">
+            <h3 className="text-xl font-bold text-foreground flex items-center gap-2"><Phone size={22} className="text-primary"/> Atendimento</h3>
+            <p className="text-sm text-muted-foreground mt-1">Como os clientes entrarão em contato para finalizar pedidos e tirar dúvidas.</p>
+          </div>
+          <div className="space-y-6">
+            <label className="block max-w-md">
+              <span className="text-sm font-bold text-foreground mb-1.5 block">Número do WhatsApp para Receber Pedidos</span>
+              <input required value={form?.contato||''} onChange={e=>setForm({...form,contato:e.target.value})} placeholder="Ex: 5511999999999" className="w-full border rounded-xl p-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all bg-background font-mono text-base"/>
+              <p className="text-xs text-muted-foreground mt-2 bg-secondary p-3 rounded-lg">Importante: Coloque o código do país (55) + DDD + número. Apenas números, sem traços ou parênteses.</p>
+            </label>
+          </div>
+        </section>
+        
+        <div className="flex justify-end pt-2">
+          <button disabled={salvando} type="submit" className="bg-primary text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-brand-hover shadow-md hover:shadow-lg flex items-center gap-3 transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100">
+            {salvando && <Loader2 className="animate-spin" size={24} />}
+            {salvando ? "Salvando Alterações..." : "Salvar Configurações"}
+          </button>
+        </div>
       </form>
     </div>
   );
