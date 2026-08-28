@@ -1,4 +1,4 @@
-﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,8 +22,8 @@ function AdminLayout() {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    document.documentElement.style.fontSize = `${zoomLevel * 16}px`;
-  }, [zoomLevel]);
+    document.documentElement.style.fontSize = `${(zoomPercent / 100) * 16}px`;
+  }, [zoomPercent]);
 
   useEffect(() => {
     if (isDark) document.documentElement.classList.add('dark');

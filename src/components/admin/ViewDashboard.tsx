@@ -1,4 +1,4 @@
-﻿import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { Store, ShoppingBag, Clock, Users, Target, CalendarClock } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
@@ -39,7 +39,8 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
       if (qty > 1) recorrentes++; else novos++;
     });
     return [
-      { name: 'Fidelização', Novos: novos, Recorrentes: recorrentes }
+      { name: 'Novos', value: novos, color: 'var(--primary)' },
+      { name: 'Recorrentes', value: recorrentes, color: 'var(--sage)' }
     ];
   }, [pedidos]);
 
@@ -120,18 +121,18 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
           <h3 className="font-bold text-xl mb-6">Novos vs Recorrentes</h3>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={clientsData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} />
+              <PieChart>
+                <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value">
+                  {clientsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
                 <Tooltip 
-                  cursor={{fill: 'var(--secondary)'}}
-                  contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)' }}
+                  contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
                 />
-                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }}/>
-                <Bar dataKey="Novos" fill="var(--primary)" radius={[8, 8, 0, 0]} barSize={40} />
-                <Bar dataKey="Recorrentes" fill="var(--sage)" radius={[8, 8, 0, 0]} barSize={40} />
-              </BarChart>
+                <Legend iconType="circle" verticalAlign="bottom" height={36}/>
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </div>

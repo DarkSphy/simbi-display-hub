@@ -14,23 +14,27 @@ export function ViewClientes() {
   const clientes = useMemo(() => {
     const map = new Map();
     pedidos.forEach(p => {
+      const pDate = new Date(p.created_at).getTime();
       if (!map.has(p.cliente_whatsapp)) {
-        map.set(p.cliente_whatsapp, { nome: p.cliente_nome, whatsapp: p.cliente_whatsapp, endereco: p.cliente_endereco, total: Number(p.total), qty: 1 });
+        map.set(p.cliente_whatsapp, { nome: p.cliente_nome, whatsapp: p.cliente_whatsapp, endereco: p.cliente_endereco, total: Number(p.total), qty: 1, ultimo_pedido: pDate });
       } else {
         const c = map.get(p.cliente_whatsapp);
         c.total += Number(p.total); c.qty += 1;
+        if (pDate > c.ultimo_pedido) c.ultimo_pedido = pDate;
       }
     });
     return Array.from(map.values()).map(c => ({
       ...c,
-      tipo: c.qty > 1 ? "recorrente" : "novo"
+      tipo: c.qty > 1 ? "recorrente" : "novo",
+      dias_desde_ultimo: Math.floor((new Date().getTime() - c.ultimo_pedido) / (1000 * 60 * 60 * 24))
     })).sort((a,b)=>b.total - a.total);
   }, [pedidos]);
 
   const filtrados = clientes.filter(c => {
     const matchBusca = c.nome.toLowerCase().includes(busca.toLowerCase()) || c.whatsapp.includes(busca);
     const matchTipo = filtroTipo === "todos" || c.tipo === filtroTipo;
-    return matchBusca && matchTipo;
+    const matchData = filtroData === "todos" || c.dias_desde_ultimo <= Number(filtroData);
+    return matchBusca && matchTipo && matchData;
   });
 
   return (
@@ -48,6 +52,12 @@ export function ViewClientes() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
           <input value={busca} onChange={e=>setBusca(e.target.value)} placeholder="Buscar cliente ou WhatsApp..." className="w-full pl-12 pr-4 py-3 bg-surface border border-border rounded-xl shadow-sm outline-none focus:border-primary transition-all" />
         </div>
+        <select value={filtroData} onChange={e=>setFiltroData(e.target.value)} className="bg-surface border border-border px-4 py-3 rounded-xl shadow-sm outline-none focus:border-primary font-medium min-w-[180px]">
+          <option value="todos">Qualquer Data</option>
+          <option value="7">Últimos 7 dias</option>
+          <option value="15">Últimos 15 dias</option>
+          <option value="30">Últimos 30 dias</option>
+        </select>
         <select value={filtroTipo} onChange={e=>setFiltroTipo(e.target.value)} className="bg-surface border border-border px-4 py-3 rounded-xl shadow-sm outline-none focus:border-primary font-medium min-w-[180px]">
           <option value="todos">Todos os Clientes</option>
           <option value="novo">Novos (1 Pedido)</option>
@@ -73,9 +83,9 @@ export function ViewClientes() {
             </div>
             <p className="text-sm text-muted-foreground line-clamp-2 mb-5" title={c.endereco}>{c.endereco}</p>
             <div className="pt-4 border-t border-border flex justify-between items-end">
-              <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">Pedidos</p>
-                <p className="font-bold">{c.qty}</p>
+              <div className="text-left">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">Última Compra</p>
+                <p className="font-bold text-xs text-muted-foreground">{c.dias_desde_ultimo === 0 ? "Hoje" : `Há ${c.dias_desde_ultimo} dias`}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-1">Gasto Total</p>
