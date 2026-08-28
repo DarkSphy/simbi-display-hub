@@ -73,8 +73,8 @@ function FlyingAnimationProvider() {
             width: 50, height: 50,
             left: flyingItem.startX - 25, top: flyingItem.startY - 25,
             transform: 'translate(calc(100vw - 80px - var(--startX)), calc(100vh - 80px - var(--startY))) scale(0.2)',
-            '--startX': \px,
-            '--startY': \px,
+            '--startX': `${flyingItem.startX}px`,
+            '--startY': `${flyingItem.startY}px`,
             opacity: 0.8
           } as any}
         />
@@ -111,7 +111,7 @@ function ProductModal({ produto, onClose, onAdd }: { produto: any, onClose: () =
                   <button onClick={(e)=>{e.stopPropagation(); setImgIndex((i)=> i === fotos.length-1 ? 0 : i+1);}} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 text-white p-1.5 rounded-full hover:bg-black/60"><ChevronRight/></button>
                   <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
                     {fotos.map((_, i) => (
-                      <div key={i} className={h-1.5 rounded-full transition-all \}/>
+                      <div key={i} className={`h-1.5 rounded-full transition-all ${i === imgIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/50'}`}/>
                     ))}
                   </div>
                 </>
@@ -180,7 +180,7 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
     if (imgSrc) {
       triggerAnimation(imgSrc, e);
     } else {
-      toast.success(qty > 1 ? \x \ adicionados! : \ adicionado!);
+      toast.success(qty > 1 ? `${qty}x ${p.nome} adicionados!` : `${p.nome} adicionado!`);
     }
     setProdutoAtivo(null);
   };
@@ -192,7 +192,7 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
     if (imgSrc) {
       triggerAnimation(imgSrc, e);
     } else {
-      toast.success(\ adicionado!);
+      toast.success(`${p.nome} adicionado!`);
     }
   };
 
@@ -233,7 +233,7 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x">
             {categorias.map(c => (
-              <button key={c} onClick={() => setCategoria(c)} className={px-5 py-3 rounded-2xl font-semibold whitespace-nowrap snap-start transition-all \}>
+              <button key={c} onClick={() => setCategoria(c)} className={`px-5 py-3 rounded-2xl font-semibold whitespace-nowrap snap-start transition-all ${categoria === c ? 'bg-primary text-white shadow-sm' : 'bg-surface border border-border text-muted-foreground hover:text-foreground'}`}>
                 {c}
               </button>
             ))}
@@ -310,9 +310,9 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
         cliente_nome: nome, cliente_whatsapp: whatsapp, cliente_endereco: endereco, itens: items, total: total, catalogo_id: catalogo.id
       });
       if (error) throw error;
-      const msgItens = items.map(i => - \x \ (\)).join('%0A');
-      const mensagem = Olá! Gostaria de fazer o seguinte pedido:%0A%0A\%0A%0ATotal: *\*%0A%0A*Meus dados:*%0ANome: \%0AWhatsApp: \%0AEndereço: \;
-      const url = https://wa.me/\?text=\;
+      const msgItens = items.map(i => `- ${i.quantidade}x ${i.nome} (${moeda(Number(i.preco) * i.quantidade)})`).join('%0A');
+      const mensagem = `Olá! Gostaria de fazer o seguinte pedido:%0A%0A${msgItens}%0A%0ATotal: *${moeda(total)}*%0A%0A*Meus dados:*%0ANome: ${nome}%0AWhatsApp: ${whatsapp}%0AEndereço: ${endereco}`;
+      const url = `https://wa.me/${String(catalogo.contato || '').replace(/\D/g, '')}?text=${mensagem}`;
       clearCart(); setOpen(false); window.open(url, '_blank');
     } catch (err) {
       console.error("Erro no checkout:", err); toast.error("Erro ao enviar pedido. A loja precisa configurar o sistema.");
