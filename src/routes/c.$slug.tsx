@@ -374,7 +374,7 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
                   <input required value={whatsapp} onChange={e=>setWhatsapp(e.target.value)} placeholder="WhatsApp" className="w-full p-4 rounded-2xl bg-background border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-mono"/>
                   <textarea required value={endereco} onChange={e=>setEndereco(e.target.value)} placeholder="Endereço de Entrega Completo" className="w-full p-4 rounded-2xl bg-background border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" rows={3}/>
                   <button disabled={loading} type="submit" className="w-full p-5 rounded-2xl bg-primary hover:bg-brand-hover text-white font-bold flex justify-center items-center gap-3 mt-6 shadow-[0_4px_14px_rgba(0,0,0,0.2)] shadow-primary/40 transition-transform active:scale-95 disabled:opacity-50 text-lg">
-                    {loading ? "Enviando..." : <><MessageCircle size={22}/> Finalizar via WhatsApp</>}
+                    {loading ? "Enviando..." : <><MessageCircle size={22}/> Finalize o pedido enviando para o WhatsApp</>}
                   </button>
                 </form>
               </div>
