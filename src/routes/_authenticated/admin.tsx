@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { LogOut, LayoutDashboard, ShoppingBag, Users, Settings, PackageOpen, Store, ExternalLink, ZoomIn, ZoomOut, Moon, Sun } from "lucide-react";
+import { LogOut, LayoutDashboard, ShoppingBag, Users, Settings, PackageOpen, Store, ExternalLink, ZoomIn, ZoomOut, Moon, Sun, Archive } from "lucide-react";
 import { Toaster } from "sonner";
 
 import { ViewDashboard } from "@/components/admin/ViewDashboard";
@@ -10,6 +10,7 @@ import { ViewPedidos } from "@/components/admin/ViewPedidos";
 import { ViewProdutos } from "@/components/admin/ViewProdutos";
 import { ViewClientes } from "@/components/admin/ViewClientes";
 import { ViewConfiguracoes } from "@/components/admin/ViewConfiguracoes";
+import { ViewEstoque } from "@/components/admin/ViewEstoque";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminLayout,
@@ -104,6 +105,7 @@ function AdminLayout() {
     { id: 'painel', label: 'Painel', icon: LayoutDashboard },
     { id: 'pedidos', label: 'Pedidos', icon: ShoppingBag },
     { id: 'produtos', label: 'Produtos', icon: PackageOpen },
+    { id: 'estoque', label: 'Estoque', icon: Archive },
     { id: 'clientes', label: 'Clientes', icon: Users },
     { id: 'configuracoes', label: 'Configurações', icon: Settings },
   ];
@@ -169,6 +171,7 @@ function AdminLayout() {
           {activeTab === 'painel' && <ViewDashboard linkPublico={linkPublico} />}
           {activeTab === 'pedidos' && <ViewPedidos />}
           {activeTab === 'produtos' && <ViewProdutos catalogo={catalogo} />}
+          {activeTab === 'estoque' && <ViewEstoque catalogo={catalogo} />}
           {activeTab === 'clientes' && <ViewClientes />}
           {activeTab === 'configuracoes' && <ViewConfiguracoes catalogo={catalogo} reload={() => queryClient.invalidateQueries({ queryKey: ["meu-catalogo"] })} />}
           </div>
