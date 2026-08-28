@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ShoppingBag, Search, ExternalLink, Menu, X, MessageCircle, ChevronLeft, ChevronRight, Info, Minus, Plus, Package, Weight, Clock, CalendarClock } from "lucide-react";
@@ -204,7 +204,7 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground pb-24">
+    <div className={`min-h-screen bg-background text-foreground pb-24 ${catalogo.tema_escuro ? "dark" : ""}`} style={catalogo.cor_primaria ? { "--primary": catalogo.cor_primaria } as React.CSSProperties : undefined}>
       {produtoAtivo && (
         <ProductModal 
           produto={produtoAtivo} 
@@ -220,7 +220,7 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
           {catalogo.logo_url && (
             <div className="w-28 h-28 rounded-3xl overflow-hidden border-4 border-background shadow-xl shrink-0">
-              <img src={catalogo.logo_url} alt="Logo" className="w-full h-full object-cover bg-white" />
+              <img src={catalogo.logo_url} alt="Logo" className="w-full h-full object-contain bg-white" />
             </div>
           )}
           <div className="flex-1">

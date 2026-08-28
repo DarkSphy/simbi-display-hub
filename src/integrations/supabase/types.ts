@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -28,6 +28,8 @@ export type Database = {
           logo_url: string | null
           nome: string
           permitir_agendamento: boolean | null
+          cor_primaria: string | null
+          tema_escuro: boolean | null
           publicado: boolean
           slug: string
           updated_at: string
@@ -46,6 +48,8 @@ export type Database = {
           logo_url?: string | null
           nome?: string
           permitir_agendamento?: boolean | null
+          cor_primaria?: string | null
+          tema_escuro?: boolean | null
           publicado?: boolean
           slug: string
           updated_at?: string
@@ -64,6 +68,8 @@ export type Database = {
           logo_url?: string | null
           nome?: string
           permitir_agendamento?: boolean | null
+          cor_primaria?: string | null
+          tema_escuro?: boolean | null
           publicado?: boolean
           slug?: string
           updated_at?: string

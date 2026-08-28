@@ -63,7 +63,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
             <div className="size-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center"><Store size={24}/></div>
             <p className="font-semibold text-muted-foreground">Faturamento</p>
           </div>
-          <p className="font-display text-4xl font-bold text-foreground relative z-10">{moeda(total)}</p>
+          <p className="font-display text-3xl xl:text-4xl whitespace-nowrap font-bold text-foreground relative z-10">{moeda(total)}</p>
         </div>
         <div className="bg-surface border border-border rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
           <div className="absolute -right-6 -top-6 text-sage/5 group-hover:scale-110 transition-transform"><ShoppingBag size={100}/></div>
@@ -71,7 +71,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
             <div className="size-12 rounded-2xl bg-sage/10 text-sage flex items-center justify-center"><ShoppingBag size={24}/></div>
             <p className="font-semibold text-muted-foreground">Vendas</p>
           </div>
-          <p className="font-display text-4xl font-bold text-foreground relative z-10">{pedidos.length}</p>
+          <p className="font-display text-3xl xl:text-4xl whitespace-nowrap font-bold text-foreground relative z-10">{pedidos.length}</p>
         </div>
         <div className="bg-surface border border-border rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
           <div className="absolute -right-6 -top-6 text-amber-500/5 group-hover:scale-110 transition-transform"><Clock size={100}/></div>
@@ -79,7 +79,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
             <div className="size-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center"><Clock size={24}/></div>
             <p className="font-semibold text-muted-foreground">Pendentes</p>
           </div>
-          <p className="font-display text-4xl font-bold text-foreground relative z-10">{pendentes}</p>
+          <p className="font-display text-3xl xl:text-4xl whitespace-nowrap font-bold text-foreground relative z-10">{pendentes}</p>
         </div>
         <div className="bg-surface border border-border rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
           <div className="absolute -right-6 -top-6 text-blue-500/5 group-hover:scale-110 transition-transform"><Users size={100}/></div>
