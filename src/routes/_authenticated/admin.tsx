@@ -133,14 +133,14 @@ function AdminLayout() {
       </aside>
 
       <main className="flex-1 md:ml-64 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border p-4 flex flex-wrap justify-end items-center gap-4">
-          <div className="flex items-center gap-3 bg-surface border border-border px-4 py-2 rounded-2xl shadow-sm">
+        <header className="sticky top-0 z-50 bg-surface border-b border-border p-4 flex flex-wrap justify-end items-center gap-4">
+          <div className="flex items-center gap-3 bg-background border border-border px-4 py-2 rounded-2xl shadow-sm">
             <span className="text-sm font-semibold text-muted-foreground mr-1">Zoom:</span>
-            <button type="button" onClick={() => setZoomPercent(prev => Math.max(70, prev - 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomOut size={18}/></button>
-            <span className="text-sm font-bold font-mono w-10 text-center text-primary">{zoomPercent}%</span>
-            <button type="button" onClick={() => setZoomPercent(prev => Math.min(130, prev + 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomIn size={18}/></button>
+            <button type="button" onClick={() => setZoomPercent(prev => Math.max(20, prev - 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomOut size={18}/></button>
+            <span className="text-sm font-bold font-mono w-12 text-center text-primary">{zoomPercent}%</span>
+            <button type="button" onClick={() => setZoomPercent(prev => Math.min(200, prev + 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomIn size={18}/></button>
           </div>
-          <button type="button" onClick={() => setIsDark(prev => !prev)} className="flex items-center gap-2 bg-surface border border-border px-4 py-2.5 rounded-2xl shadow-sm text-sm font-bold text-muted-foreground hover:text-foreground transition-all">
+          <button type="button" onClick={() => setIsDark(prev => !prev)} className="flex items-center gap-2 bg-background border border-border px-4 py-2.5 rounded-2xl shadow-sm text-sm font-bold text-muted-foreground hover:text-foreground transition-all">
             {isDark ? <Sun size={18} className="text-amber-500"/> : <Moon size={18} className="text-primary"/>}
             {isDark ? 'Modo Claro' : 'Modo Escuro'}
           </button>
