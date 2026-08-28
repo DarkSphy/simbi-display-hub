@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -19,6 +19,7 @@ export type Database = {
           capa_url: string | null
           categorias_padrao: Json | null
           contato: string
+          cor_primaria: string | null
           created_at: string
           descricao: string
           endereco: string
@@ -28,10 +29,9 @@ export type Database = {
           logo_url: string | null
           nome: string
           permitir_agendamento: boolean | null
-          cor_primaria: string | null
-          tema_escuro: boolean | null
           publicado: boolean
           slug: string
+          tema_escuro: boolean | null
           updated_at: string
           user_id: string
         }
@@ -39,6 +39,7 @@ export type Database = {
           capa_url?: string | null
           categorias_padrao?: Json | null
           contato?: string
+          cor_primaria?: string | null
           created_at?: string
           descricao?: string
           endereco?: string
@@ -48,10 +49,9 @@ export type Database = {
           logo_url?: string | null
           nome?: string
           permitir_agendamento?: boolean | null
-          cor_primaria?: string | null
-          tema_escuro?: boolean | null
           publicado?: boolean
           slug: string
+          tema_escuro?: boolean | null
           updated_at?: string
           user_id: string
         }
@@ -59,6 +59,7 @@ export type Database = {
           capa_url?: string | null
           categorias_padrao?: Json | null
           contato?: string
+          cor_primaria?: string | null
           created_at?: string
           descricao?: string
           endereco?: string
@@ -68,10 +69,9 @@ export type Database = {
           logo_url?: string | null
           nome?: string
           permitir_agendamento?: boolean | null
-          cor_primaria?: string | null
-          tema_escuro?: boolean | null
           publicado?: boolean
           slug?: string
+          tema_escuro?: boolean | null
           updated_at?: string
           user_id?: string
         }
