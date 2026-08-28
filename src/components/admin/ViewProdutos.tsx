@@ -1,4 +1,4 @@
-﻿import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Plus, X, Search, Loader2, Image as ImageIcon, Weight, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
