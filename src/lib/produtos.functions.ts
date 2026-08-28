@@ -1,4 +1,4 @@
-﻿import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@tanstack/react-start";
 import type { Database } from "@/integrations/supabase/types";
 
 export type Produto = Database["public"]["Tables"]["produtos"]["Row"];
