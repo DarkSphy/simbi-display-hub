@@ -30,6 +30,50 @@ type TabType = "dashboard" | "pedidos" | "produtos" | "clientes" | "configuracoe
    COMPONENTS
 ========================================================= */
 
+function MultipleImageUpload({ label, values, onChange }: { label: string, values: string[], onChange: (urls: string[]) => void }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setLoading(true);
+    try {
+      const newUrls = await Promise.all(files.map(f => uploadImagem(f)));
+      onChange([...(values || []), ...newUrls]);
+    } catch (err) {
+      alert("Erro ao fazer upload das imagens.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newValues = [...(values || [])];
+    newValues.splice(index, 1);
+    onChange(newValues);
+  };
+
+  return (
+    <div className="space-y-3">
+      <span className="text-sm font-bold text-muted-foreground block">{label}</span>
+      <div className="flex flex-wrap items-center gap-4">
+        {(values || []).map((url, i) => (
+          <div key={i} className="relative size-20 rounded-xl overflow-hidden border border-border group">
+            <img src={url} alt="Galeria" className="w-full h-full object-cover" />
+            <button type="button" onClick={() => removeImage(i)} className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <X size={20} />
+            </button>
+          </div>
+        ))}
+        
+        <label className="flex flex-col items-center justify-center size-20 border-2 border-dashed border-border rounded-xl cursor-pointer hover:border-primary hover:bg-secondary/50 transition-colors">
+          {loading ? <Loader2 className="animate-spin text-muted-foreground" size={24} /> : <Plus className="text-muted-foreground" size={24} />}
+          <input type="file" className="hidden" accept="image/*" multiple onChange={handleFileChange} disabled={loading} />
+        </label>
+      </div>
+    </div>
+  );
+}
 function ImageUpload({ label, value, onChange }: { label: string, value: string, onChange: (url: string) => void }) {
   const [loading, setLoading] = useState(false);
 
@@ -446,10 +490,9 @@ function ViewProdutos({ catalogo }: { catalogo: Catalogo }) {
             <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Medida (Ex: 1kg)</span><input required value={form.medida || ''} onChange={e=>setForm({...form,medida:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
             
             <label className="col-span-2 block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Descrição</span><textarea value={form.descricao||''} onChange={e=>setForm({...form,descricao:e.target.value})} rows={3} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
+<label className="col-span-2 block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Modo de Preparo / Detalhes (Opcional)</span><textarea value={form.modo_preparo||''} onChange={e=>setForm({...form,modo_preparo:e.target.value})} rows={4} className="w-full border rounded-xl p-3 outline-none focus:border-primary" placeholder="Detalhes mais completos que aparecerão na tela do produto..."/></label>
             
-            <div className="col-span-2">
-              <ImageUpload label="Foto do Produto (Opcional)" value={form.imagem_url} onChange={(url) => setForm({...form, imagem_url: url})} />
-            </div>
+            <div className="col-span-2 md:col-span-1"><ImageUpload label="Foto Principal (Vitrine)" value={form.imagem_url} onChange={(url) => setForm({...form, imagem_url: url})} /></div><div className="col-span-2 md:col-span-1"><MultipleImageUpload label="Galeria de Fotos (Opcional)" values={form.galeria || []} onChange={(urls) => setForm({...form, galeria: urls})} /></div>
           </div>
 
           <div className="flex gap-4 pt-4 border-t border-border">

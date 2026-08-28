@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+﻿import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -116,6 +116,7 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 import { CartProvider } from "../contexts/CartContext";
+import { Toaster } from "sonner";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -123,8 +124,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        {/* Required: nested routes render here. Removing <Outlet />
+        <Toaster position="top-center" richColors /> breaks all child routes. */}
         <Outlet />
+        <Toaster position="top-center" richColors />
       </CartProvider>
     </QueryClientProvider>
   );

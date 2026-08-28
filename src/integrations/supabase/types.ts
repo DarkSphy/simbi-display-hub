@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -72,6 +72,8 @@ export type Database = {
           disponivel: boolean
           id: string
           imagem_url: string | null
+          modo_preparo: string | null
+          galeria: string[] | null
           medida: string
           nome: string
           ordem: number
@@ -88,6 +90,8 @@ export type Database = {
           disponivel?: boolean
           id?: string
           imagem_url?: string | null
+          modo_preparo?: string | null
+          galeria?: string[] | null
           medida?: string
           nome: string
           ordem?: number
@@ -104,6 +108,8 @@ export type Database = {
           disponivel?: boolean
           id?: string
           imagem_url?: string | null
+          modo_preparo?: string | null
+          galeria?: string[] | null
           medida?: string
           nome?: string
           ordem?: number
