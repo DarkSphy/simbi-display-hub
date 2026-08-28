@@ -219,8 +219,8 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
           {catalogo.logo_url && (
-            <div className="w-28 h-28 rounded-3xl overflow-hidden border-4 border-background shadow-xl shrink-0">
-              <img src={catalogo.logo_url} alt="Logo" className="w-full h-full object-contain bg-white" />
+            <div className="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden border-4 border-background shadow-xl shrink-0 bg-white flex items-center justify-center p-1">
+              <img src={catalogo.logo_url} alt="Logo" className="w-full h-full object-contain" />
             </div>
           )}
           <div className="flex-1">
