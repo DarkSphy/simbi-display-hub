@@ -7,7 +7,7 @@ export type Catalogo = Database["public"]["Tables"]["catalogos"]["Row"];
 
 export type ProdutoPublico = Pick<
   Produto,
-  "id" | "nome" | "descricao" | "categoria" | "preco" | "medida" | "imagem_url" | "disponivel" | "modo_preparo" | "galeria" | "destaque" | "ordem"
+  "id" | "nome" | "descricao" | "categoria" | "preco" | "medida" | "imagem_url" | "disponivel" | "modo_preparo" | "galeria" | "tipo_venda" | "destaque" | "ordem"
 >;
 
 export type CatalogoPublico = {

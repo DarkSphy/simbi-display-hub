@@ -1,55 +1,43 @@
 ﻿import { createFileRoute, Link } from "@tanstack/react-router";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Store, MessageCircle, BarChart3, ArrowRight } from "lucide-react";
-
-import { listarCatalogosPublicos } from "@/lib/produtos.functions";
-
-const vitrineQuery = queryOptions({
-  queryKey: ["catalogos-publicos"],
-  queryFn: () => listarCatalogosPublicos(),
-});
+import { ArrowRight, Store, MessageCircle, BarChart3, ShoppingBag } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(vitrineQuery),
-  head: () => ({
-    meta: [
-      { title: "simbi — Plataforma de Vendas e Catálogos" },
-      { name: "description", content: "Crie seu catálogo digital, receba pedidos no WhatsApp e gerencie vendas em um painel completo." },
-    ],
-  }),
-  component: Home,
+  component: LandingPage,
 });
 
-function Home() {
-  const { data: catalogos } = useSuspenseQuery(vitrineQuery);
+function LandingPage() {
+  const { data: catalogos = [] } = useQuery({
+    queryKey: ["catalogos-publicos"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("catalogos").select("*").eq("publicado", true).limit(6);
+      if (error) throw error;
+      return data;
+    },
+  });
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white">
+    <div className="min-h-screen bg-background">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-primary grid place-items-center">
-              <Store className="text-white size-5" />
-            </div>
-            <span className="font-display font-bold text-2xl tracking-tight">simbi</span>
+            <Store className="text-primary size-6" />
+            <span className="font-display font-bold text-xl tracking-tight">simbi</span>
           </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-            <a href="#funcionalidades" className="text-muted-foreground hover:text-foreground transition">Funcionalidades</a>
-            <a href="#vitrine" className="text-muted-foreground hover:text-foreground transition">Explorar Catálogos</a>
-          </nav>
           <div className="flex items-center gap-4">
-            <Link to="/auth" className="hidden sm:block text-sm font-semibold hover:text-primary transition">Entrar</Link>
-            <Link to="/auth" className="bg-primary hover:bg-brand-hover text-white px-5 py-2.5 rounded-full text-sm font-semibold shadow-soft transition-all hover:-translate-y-0.5">
-              Criar Catálogo Grátis
-            </Link>
+            <Link to="/auth" className="text-sm font-semibold hover:text-primary transition-colors">Entrar</Link>
+            <Link to="/auth" className="bg-foreground text-background text-sm font-bold px-4 py-2 rounded-full hover:bg-foreground/90 transition-transform hover:-translate-y-0.5">Criar Loja</Link>
           </div>
         </div>
-      </header>
+      </nav>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-24 pb-32">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
+      {/* Hero */}
+      <section className="pt-32 pb-24 relative overflow-hidden">
+        {/* BG Glows */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -z-10" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-pink-500/10 blur-[100px] rounded-full pointer-events-none -z-10" />
         
         <div className="max-w-7xl mx-auto px-6 text-center flex flex-col items-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border text-sm font-medium mb-8">
@@ -81,7 +69,7 @@ function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="font-display text-4xl font-bold tracking-tight">Um sistema completo. Sem complicação.</h2>
-            <p className="mt-4 text-muted-foreground">Venda produtos frescos, físicos ou serviços com uma experiência premium.</p>
+            <p className="mt-4 text-muted-foreground">Venda produtos físicos ou serviços com uma experiência premium.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -109,7 +97,7 @@ function Home() {
                   <BarChart3 size={24} />
                 </div>
                 <h3 className="font-display text-3xl font-bold mb-4">Painel Administrativo Completo</h3>
-                <p className="text-white/70 text-lg">Acompanhe faturamento, controle status dos pedidos, veja a base de clientes e atualize produtos em tempo real. Uma visão 360° do seu negócio.</p>
+                <p className="text-white/70 text-lg">Acompanhe faturamento, controle status dos pedidos, veja a base de clientes e atualize produtos em tempo real. Uma visão 360 do seu negócio.</p>
               </div>
               <div className="flex-1 w-full flex justify-end">
                 <div className="w-full max-w-sm bg-white/5 rounded-2xl border border-white/10 p-6 backdrop-blur-md">
