@@ -424,10 +424,10 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
                       <Clock size={22}/> A Loja está fechada no momento
                     </div>
                   ) : (
-                  <button disabled={loading} type="submit" className="w-full rounded-2xl bg-primary p-5 text-lg font-bold text-primary-foreground shadow-lg transition-transform active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 mt-6">
-                    {loading ? "Enviando..." : isAgendamento ? <><CalendarClock size={22}/> Agendar via WhatsApp</> : <><MessageCircle size={22}/> Finalize o pedido enviando para o WhatsApp</>}
+                    <button disabled={loading} type="submit" className="mt-6 flex w-full items-center justify-center gap-3 rounded-2xl bg-primary p-5 text-lg font-bold text-primary-foreground shadow-lg transition-transform active:scale-95 disabled:opacity-50">
+                      {loading ? "Enviando..." : isAgendamento ? <><CalendarClock size={22}/> Agendar via WhatsApp</> : <><MessageCircle size={22}/> Finalize o pedido enviando para o WhatsApp</>}
+                    </button>
                   )}
-                  </button>
                 </form>
               </div>
             )}
