@@ -9,6 +9,7 @@ export type Pedido = {
   itens: any[];
   total: number;
   status: string;
+  agendado: boolean | null;
 };
 
 export async function listarPedidos(): Promise<Pedido[]> {
