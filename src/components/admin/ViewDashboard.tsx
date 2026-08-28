@@ -96,7 +96,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
         <div className="lg:col-span-2 bg-surface border border-border rounded-3xl p-8 shadow-sm">
           <h3 className="font-bold text-xl mb-6">Desempenho de Vendas</h3>
           <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
@@ -120,35 +120,35 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
         <div className="bg-surface border border-border rounded-3xl p-8 shadow-sm">
           <h3 className="font-bold text-xl mb-6">Novos vs Recorrentes</h3>
           <div className="h-[300px] w-full flex flex-col">
-            {pedidos.length === 0 ? (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
-            ) : (
-              <>
-                <ResponsiveContainer width="100%" height="80%">
-                  <PieChart>
-                    <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value" nameKey="name">
-                      {clientsData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                      itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-                <div className="flex justify-center gap-8 mt-2">
-                  {clientsData.map(c => (
-                    <div key={c.name} className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-xl">
-                      <div className="size-3 rounded-full" style={{ backgroundColor: c.color }} />
-                      <span className="text-sm font-medium text-muted-foreground">{c.name}:</span>
-                      <span className="font-bold text-foreground text-lg">{c.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+              {pedidos.length === 0 ? (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
+              ) : (
+                <>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <PieChart>
+                      <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value" nameKey="name">
+                        {clientsData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                        itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="flex justify-center gap-8 mt-2">
+                    {clientsData.map(c => (
+                      <div key={c.name} className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-xl">
+                        <div className="size-3 rounded-full" style={{ backgroundColor: c.color }} />
+                        <span className="text-sm font-medium text-muted-foreground">{c.name}:</span>
+                        <span className="font-bold text-foreground text-lg">{c.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
         </div>
       </div>
     </div>
