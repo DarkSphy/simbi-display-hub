@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminLayout() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("painel");
-  const [zoomLevel, setZoomLevel] = useState(1);
+  const [zoomPercent, setZoomPercent] = useState(100);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Search, Star, Users } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
@@ -9,6 +9,7 @@ export function ViewClientes() {
   const { data: pedidos = [] } = useQuery({ queryKey: ["pedidos"], queryFn: listarPedidos });
   const [busca, setBusca] = useState("");
   const [filtroTipo, setFiltroTipo] = useState("todos");
+  const [filtroData, setFiltroData] = useState("todos");
 
   const clientes = useMemo(() => {
     const map = new Map();
