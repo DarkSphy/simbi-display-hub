@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ShoppingBag, Search, ExternalLink, Menu, X, MessageCircle, ChevronLeft, ChevronRight, Info, Minus, Plus, Package, Weight, Clock, CalendarClock } from "lucide-react";
@@ -244,9 +244,20 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
                   }
                 }
                 return isOpen ? (
-                  <span className="bg-sage/20 text-sage border border-sage/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-sm"><Clock size={14}/> Aberto Agora</span>
+                  <span className="bg-sage/10 text-sage border border-sage/20 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 backdrop-blur-sm shadow-sm">
+                    <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sage opacity-75"></span><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sage"></span></span>
+                    Aberto Agora
+                  </span>
+                ) : catalogo.permitir_agendamento ? (
+                  <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 backdrop-blur-sm shadow-sm">
+                    <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-500 opacity-75"></span><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span></span>
+                    Agendamento
+                  </span>
                 ) : (
-                  <span className="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-sm"><Clock size={14}/> Fechado</span>
+                  <span className="bg-red-500/10 text-red-500 border border-red-500/20 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 backdrop-blur-sm shadow-sm">
+                    <span className="relative flex h-2.5 w-2.5"><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span></span>
+                    Fechado
+                  </span>
                 );
               })()}
             </div>
