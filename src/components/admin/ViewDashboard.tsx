@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { Store, ShoppingBag, Clock, Users, Target } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
@@ -14,20 +14,32 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
   const agendados = pedidos.filter(p => p.agendado).length;
 
   const chartData = useMemo(() => {
-    if (pedidos.length === 0) return [
-      { name: 'Seg', vendas: 0 }, { name: 'Ter', vendas: 0 }, { name: 'Qua', vendas: 0 },
-      { name: 'Qui', vendas: 0 }, { name: 'Sex', vendas: 0 }, { name: 'Sáb', vendas: 0 }, { name: 'Dom', vendas: 0 }
-    ];
-    // Mock chart for aesthetics
-    const t = total > 0 ? total : 1000;
-    return [
-      { name: 'Dia -4', vendas: Math.floor(Math.random() * t * 0.2) },
-      { name: 'Dia -3', vendas: Math.floor(Math.random() * t * 0.3) },
-      { name: 'Dia -2', vendas: Math.floor(Math.random() * t * 0.5) },
-      { name: 'Ontem', vendas: Math.floor(Math.random() * t * 0.8) },
-      { name: 'Hoje', vendas: t },
-    ];
-  }, [pedidos, total]);
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const str = d.toISOString().split('T')[0];
+      
+      let name = d.toLocaleDateString('pt-BR', { weekday: 'short' });
+      name = name.charAt(0).toUpperCase() + name.slice(1).replace('.', '');
+      if (i === 0) name = 'Hoje';
+      if (i === 1) name = 'Ontem';
+
+      days.push({ dateStr: str, name, vendas: 0 });
+    }
+
+    pedidos.forEach(p => {
+      if (p.status === 'cancelado') return;
+      if (!p.created_at) return;
+      const pDate = p.created_at.split('T')[0];
+      const day = days.find(d => d.dateStr === pDate);
+      if (day) {
+        day.vendas += Number(p.total);
+      }
+    });
+
+    return days;
+  }, [pedidos]);
 
   const clientsData = useMemo(() => {
     const map = new Map();
@@ -49,7 +61,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <h2 className="font-display text-3xl font-bold">Resumo do Dia</h2>
-          <p className="text-muted-foreground mt-1">Acompanhe seus números e desempenho.</p>
+          <p className="text-muted-foreground mt-1">Acompanhe seus números e desempenho real da loja.</p>
         </div>
         <div className="bg-surface border border-border px-5 py-3 rounded-2xl flex items-center gap-4 text-sm font-medium shadow-sm transition-all hover:shadow-md">
           <span className="text-muted-foreground flex items-center gap-2"><Target size={16}/> Link da loja:</span>
@@ -94,13 +106,62 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-surface border border-border rounded-3xl p-8 shadow-sm">
-          <h3 className="font-bold text-xl mb-6">Desempenho de Vendas</h3>
-          <div className="h-[300px] w-full flex items-center justify-center bg-secondary/20 rounded-xl">AreaChart (temporariamente oculto para debug)</div>
+          <h3 className="font-bold text-xl mb-6">Desempenho de Vendas (7 Dias)</h3>
+          <div className="h-[300px] w-full block">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} tickFormatter={(value) => `R$ ${value}`} dx={-10}/>
+                <Tooltip 
+                  contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                  itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+                  formatter={(value: any) => [moeda(Number(value)), 'Vendas']}
+                />
+                <Area type="monotone" dataKey="vendas" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorVendas)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
         <div className="bg-surface border border-border rounded-3xl p-8 shadow-sm">
           <h3 className="font-bold text-xl mb-6">Novos vs Recorrentes</h3>
-          <div className="h-[300px] w-full flex items-center justify-center bg-secondary/20 rounded-xl">PieChart (temporariamente oculto para debug)</div>
+          <div className="h-[300px] w-full block">
+            {pedidos.length === 0 ? (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
+            ) : (
+              <>
+                <ResponsiveContainer width="100%" height={220}>
+                  <PieChart>
+                    <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value" nameKey="name">
+                      {clientsData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                      itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex justify-center gap-8 mt-2">
+                  {clientsData.map(c => (
+                    <div key={c.name} className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-xl">
+                      <div className="size-3 rounded-full" style={{ backgroundColor: c.color }} />
+                      <span className="text-sm font-medium text-muted-foreground">{c.name}:</span>
+                      <span className="font-bold text-foreground text-lg">{c.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
