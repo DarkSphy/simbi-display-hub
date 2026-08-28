@@ -1,4 +1,4 @@
-﻿import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -31,7 +31,9 @@ function AdminLayout() {
     queryKey: ["meu-catalogo", session?.user?.id],
     enabled: !!session?.user?.id,
     queryFn: async () => {
-      const { data, error } = await supabase.from("catalogos").select("*").eq("user_id", session!.user.id).single();
+      const userId = session?.user?.id;
+      if (!userId) return null;
+      const { data, error } = await supabase.from("catalogos").select("*").eq("user_id", userId).single();
       if (error && error.code !== 'PGRST116') throw error;
       return data;
     }
@@ -45,7 +47,7 @@ function AdminLayout() {
   if (isLoading) return <div className="min-h-screen grid place-items-center bg-background"><div className="size-8 rounded-full border-4 border-primary border-t-transparent animate-spin"/></div>;
   if (!catalogo) return <div className="min-h-screen grid place-items-center bg-background"><div className="text-center"><h2 className="text-2xl font-bold mb-4">Bem-vindo(a)!</h2><p>Você precisa criar sua loja primeiro.</p></div></div>;
 
-  const linkPublico = https://simbi-display-hub.lovable.app/c/\;
+  const linkPublico = `https://simbi-display-hub.lovable.app/c/${catalogo.slug}`;
 
   const tabs = [
     { id: 'painel', label: 'Painel', icon: LayoutDashboard },
@@ -73,7 +75,11 @@ function AdminLayout() {
             const Icon = t.icon;
             const active = activeTab === t.id;
             return (
-              <button key={t.id} onClick={()=>setActiveTab(t.id)} className={lex items-center gap-3 px-4 py-3 rounded-2xl transition-all font-semibold \}>
+              <button
+                key={t.id}
+                onClick={() => setActiveTab(t.id)}
+                className={`flex items-center gap-3 rounded-2xl px-4 py-3 font-semibold transition-all ${active ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-secondary hover:text-foreground"}`}
+              >
                 <Icon size={20} className={active ? "text-white" : "opacity-70"} />
                 {t.label}
               </button>

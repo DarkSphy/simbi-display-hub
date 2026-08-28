@@ -1,7 +1,7 @@
 ﻿import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Search, Star, Users } from "lucide-react";
-import { listarPedidos } from @/lib/pedidos.functions;
+import { listarPedidos } from "@/lib/pedidos.functions";
 
 const moeda = (valor: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
 

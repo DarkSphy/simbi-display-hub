@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -17,6 +17,7 @@ export type Database = {
       catalogos: {
         Row: {
           capa_url: string | null
+          categorias_padrao: Json | null
           contato: string
           created_at: string
           descricao: string
@@ -24,7 +25,6 @@ export type Database = {
           horario: string
           id: string
           logo_url: string | null
-          categorias_padrao: string[] | null
           nome: string
           publicado: boolean
           slug: string
@@ -33,6 +33,7 @@ export type Database = {
         }
         Insert: {
           capa_url?: string | null
+          categorias_padrao?: Json | null
           contato?: string
           created_at?: string
           descricao?: string
@@ -40,7 +41,6 @@ export type Database = {
           horario?: string
           id?: string
           logo_url?: string | null
-          categorias_padrao?: string[] | null
           nome?: string
           publicado?: boolean
           slug: string
@@ -49,6 +49,7 @@ export type Database = {
         }
         Update: {
           capa_url?: string | null
+          categorias_padrao?: Json | null
           contato?: string
           created_at?: string
           descricao?: string
@@ -56,7 +57,6 @@ export type Database = {
           horario?: string
           id?: string
           logo_url?: string | null
-          categorias_padrao?: string[] | null
           nome?: string
           publicado?: boolean
           slug?: string
@@ -64,6 +64,77 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      loja_config: {
+        Row: {
+          cor_principal: string | null
+          id: string
+          logo_url: string | null
+          mensagem_rodape: string | null
+          nome_loja: string
+          whatsapp: string
+        }
+        Insert: {
+          cor_principal?: string | null
+          id?: string
+          logo_url?: string | null
+          mensagem_rodape?: string | null
+          nome_loja?: string
+          whatsapp?: string
+        }
+        Update: {
+          cor_principal?: string | null
+          id?: string
+          logo_url?: string | null
+          mensagem_rodape?: string | null
+          nome_loja?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
+      pedidos: {
+        Row: {
+          catalogo_id: string | null
+          cliente_endereco: string
+          cliente_nome: string
+          cliente_whatsapp: string
+          created_at: string
+          id: string
+          itens: Json
+          status: string
+          total: number
+        }
+        Insert: {
+          catalogo_id?: string | null
+          cliente_endereco: string
+          cliente_nome: string
+          cliente_whatsapp: string
+          created_at?: string
+          id?: string
+          itens: Json
+          status?: string
+          total: number
+        }
+        Update: {
+          catalogo_id?: string | null
+          cliente_endereco?: string
+          cliente_nome?: string
+          cliente_whatsapp?: string
+          created_at?: string
+          id?: string
+          itens?: Json
+          status?: string
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedidos_catalogo_id_fkey"
+            columns: ["catalogo_id"]
+            isOneToOne: false
+            referencedRelation: "catalogos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       produtos: {
         Row: {
@@ -73,15 +144,15 @@ export type Database = {
           descricao: string
           destaque: boolean
           disponivel: boolean
+          galeria: Json | null
           id: string
           imagem_url: string | null
-          modo_preparo: any | null
-          tipo_venda: string | null
-          galeria: string[] | null
           medida: string
+          modo_preparo: Json | null
           nome: string
           ordem: number
           preco: number
+          tipo_venda: string | null
           updated_at: string
           visivel: boolean
         }
@@ -92,15 +163,15 @@ export type Database = {
           descricao?: string
           destaque?: boolean
           disponivel?: boolean
+          galeria?: Json | null
           id?: string
           imagem_url?: string | null
-          modo_preparo?: any | null
-          tipo_venda?: string | null
-          galeria?: string[] | null
           medida?: string
+          modo_preparo?: Json | null
           nome: string
           ordem?: number
           preco?: number
+          tipo_venda?: string | null
           updated_at?: string
           visivel?: boolean
         }
@@ -111,15 +182,15 @@ export type Database = {
           descricao?: string
           destaque?: boolean
           disponivel?: boolean
+          galeria?: Json | null
           id?: string
           imagem_url?: string | null
-          modo_preparo?: any | null
-          tipo_venda?: string | null
-          galeria?: string[] | null
           medida?: string
+          modo_preparo?: Json | null
           nome?: string
           ordem?: number
           preco?: number
+          tipo_venda?: string | null
           updated_at?: string
           visivel?: boolean
         }

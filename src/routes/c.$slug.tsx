@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ShoppingBag, Search, ExternalLink, Menu, X, MessageCircle, ChevronLeft, ChevronRight, Info, Minus, Plus, Package, Weight } from "lucide-react";
@@ -69,7 +69,7 @@ function ProductModal({ produto, onClose, onAdd }: { produto: any, onClose: () =
                   <button onClick={(e)=>{e.stopPropagation(); setImgIndex((i)=> i === fotos.length-1 ? 0 : i+1);}} className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/30 text-white p-1.5 rounded-full hover:bg-black/60"><ChevronRight/></button>
                   <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5">
                     {fotos.map((_, i) => (
-                      <div key={i} className={h-1.5 rounded-full transition-all \}/>
+                      <div key={i} className={`h-1.5 rounded-full transition-all ${i === imgIndex ? "w-6 bg-primary-foreground" : "w-1.5 bg-primary-foreground/60"}`}/>
                     ))}
                   </div>
                 </>
@@ -167,13 +167,13 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
     if (p.tipo_venda === 'peso') {
       // Como o context adiciona +1 por padrão, vamos apenas alertar ou simular
       // Como não podemos mexer no CartContext agora, vamos salvar a quantidade como multiplicador no preco para peso
-      const pesoProduto = { ...p, preco: p.preco * qty, nome: p.nome +  (\ Kg) };
+      const pesoProduto = { ...p, preco: p.preco * qty, nome: `${p.nome} (${qty} Kg)` };
       addItem(pesoProduto);
     } else {
       for(let i=0; i<qty; i++) addItem(p);
     }
     
-    toast.success(\ adicionado ao carrinho!);
+    toast.success(`${p.nome} adicionado ao carrinho!`);
     setProdutoAtivo(null);
     
     // Bump cart
@@ -193,7 +193,7 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
       return;
     }
     addItem(p);
-    toast.success(\ adicionado!);
+    toast.success(`${p.nome} adicionado!`);
     setTimeout(() => {
       const cartBtn = document.getElementById("cart-button-trigger");
       if (cartBtn) {
@@ -239,7 +239,7 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none snap-x">
             {categorias.map(c => (
-              <button key={c} onClick={() => setCategoria(c as string)} className={px-5 py-3 rounded-2xl font-semibold whitespace-nowrap snap-start transition-all \}>
+              <button key={c} onClick={() => setCategoria(c as string)} className={`snap-start whitespace-nowrap rounded-2xl px-5 py-3 font-semibold transition-all ${categoria === c ? "bg-primary text-primary-foreground" : "bg-surface text-muted-foreground hover:bg-secondary hover:text-foreground"}`}>
                 {c as string}
               </button>
             ))}
@@ -319,9 +319,10 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
         cliente_nome: nome, cliente_whatsapp: whatsapp, cliente_endereco: endereco, itens: items, total: total, catalogo_id: catalogo.id
       });
       if (error) throw error;
-      const msgItens = items.map(i => - \x \ (\)).join('%0A');
-      const mensagem = Olá! Gostaria de fazer o seguinte pedido:%0A%0A\%0A%0ATotal: *\*%0A%0A*Meus dados:*%0ANome: \%0AWhatsApp: \%0AEndereço: \;
-      const url = https://wa.me/\?text=\;
+      const msgItens = items.map((item) => `- ${item.quantidade}x ${item.nome} (${moeda(Number(item.preco) * item.quantidade)})`).join("\n");
+      const mensagem = `Olá! Gostaria de fazer o seguinte pedido:\n\n${msgItens}\n\nTotal: *${moeda(total)}*\n\n*Meus dados:*\nNome: ${nome}\nWhatsApp: ${whatsapp}\nEndereço: ${endereco}`;
+      const numeroContato = String(catalogo.contato ?? "").replace(/\D/g, "");
+      const url = `https://wa.me/${numeroContato}?text=${encodeURIComponent(mensagem)}`;
       clearCart(); setOpen(false); window.open(url, '_blank');
     } catch (err) {
       console.error("Erro no checkout:", err); toast.error("Erro ao enviar pedido. A loja precisa configurar o sistema.");
