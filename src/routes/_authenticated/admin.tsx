@@ -29,18 +29,21 @@ function AdminLayout() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("painel");
   const [zoomPercent, setZoomPercent] = useState(100);
+  const [zoomHydrated, setZoomHydrated] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('simbi_zoom');
     const parsed = saved ? Number.parseInt(saved, 10) : 100;
     if (Number.isFinite(parsed)) setZoomPercent(parsed);
+    setZoomHydrated(true);
   }, []);
 
   useEffect(() => {
+    if (!zoomHydrated) return;
     localStorage.setItem('simbi_zoom', zoomPercent.toString());
     document.documentElement.style.fontSize = `${(zoomPercent / 100) * 16}px`;
-  }, [zoomPercent]);
+  }, [zoomHydrated, zoomPercent]);
 
   useEffect(() => {
     if (isDark) document.documentElement.classList.add('dark');
