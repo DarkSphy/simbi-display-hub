@@ -119,40 +119,35 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
 
         <div className="bg-surface border border-border rounded-3xl p-8 shadow-sm">
           <h3 className="font-bold text-xl mb-6">Novos vs Recorrentes</h3>
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              {pedidos.length === 0 ? (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
-              ) : (
-                <PieChart>
-                  <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value" nameKey="name" 
-                    label={(props: any) => {
-                      const { cx, cy, midAngle, innerRadius, outerRadius, value } = props;
-                      if (!value) return null;
-                      const RADIAN = Math.PI / 180;
-                      const radius = innerRadius + (outerRadius - innerRadius) * 0.65;
-                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                      return (
-                        <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontWeight="900" fontSize="22" filter="drop-shadow(0px 2px 2px rgba(0,0,0,0.3))">
-                          {value}
-                        </text>
-                      );
-                    }}
-                    labelLine={false}
-                  >
-                    {clientsData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                    itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
-                  />
-                  <Legend iconType="circle" verticalAlign="bottom" height={36}/>
-                </PieChart>
-              )}
-            </ResponsiveContainer>
+          <div className="h-[300px] w-full flex flex-col">
+            {pedidos.length === 0 ? (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
+            ) : (
+              <>
+                <ResponsiveContainer width="100%" height="80%">
+                  <PieChart>
+                    <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value" nameKey="name">
+                      {clientsData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                      itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex justify-center gap-8 mt-2">
+                  {clientsData.map(c => (
+                    <div key={c.name} className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-xl">
+                      <div className="size-3 rounded-full" style={{ backgroundColor: c.color }} />
+                      <span className="text-sm font-medium text-muted-foreground">{c.name}:</span>
+                      <span className="font-bold text-foreground text-lg">{c.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

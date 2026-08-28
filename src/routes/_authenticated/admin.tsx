@@ -147,6 +147,7 @@ function AdminLayout() {
           {activeTab === 'produtos' && <ViewProdutos catalogo={catalogo} />}
           {activeTab === 'clientes' && <ViewClientes />}
           {activeTab === 'configuracoes' && <ViewConfiguracoes catalogo={catalogo} reload={() => queryClient.invalidateQueries({ queryKey: ["meu-catalogo"] })} />}
+          </div>
         </div>
       </main>
     </div>
