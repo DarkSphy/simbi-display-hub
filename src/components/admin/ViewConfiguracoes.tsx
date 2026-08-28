@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ImageIcon, Store, Phone, Loader2, Plus, X } from "lucide-react";
 import { uploadImagem } from "@/lib/storage.functions";

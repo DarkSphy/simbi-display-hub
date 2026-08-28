@@ -1,4 +1,4 @@
-﻿import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Search, Filter, CheckCircle2, Loader2, Calendar, CalendarClock } from "lucide-react";
 import { listarPedidos, atualizarStatusPedido } from "@/lib/pedidos.functions";

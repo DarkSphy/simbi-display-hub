@@ -1,4 +1,4 @@
-﻿import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Search, Star, Users } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
