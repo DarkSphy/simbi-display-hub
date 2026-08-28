@@ -439,7 +439,6 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
                     {loading ? "Enviando..." : isAgendamento ? <><CalendarClock size={22}/> Agendar via WhatsApp</> : <><MessageCircle size={22}/> Finalize o pedido enviando para o WhatsApp</>}
                   </button>
                   )}
-                  </button>
                 </form>
               </div>
             )}
