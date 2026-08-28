@@ -1,6 +1,6 @@
 ﻿import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Search, Filter, CheckCircle2, Loader2, Calendar } from "lucide-react";
+import { Search, Filter, CheckCircle2, Loader2, Calendar, CalendarClock } from "lucide-react";
 import { listarPedidos, atualizarStatusPedido } from "@/lib/pedidos.functions";
 import { format, isToday, isYesterday, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -18,7 +18,7 @@ export function ViewPedidos() {
 
   const filtrados = pedidos.filter(p => {
     const matchBusca = p.cliente_nome.toLowerCase().includes(busca.toLowerCase()) || p.cliente_whatsapp.includes(busca);
-    const matchStatus = filtroStatus === "todos" || p.status === filtroStatus;
+    const matchStatus = filtroStatus === "todos" || (filtroStatus === "agendados" ? p.agendado : p.status === filtroStatus);
     return matchBusca && matchStatus;
   });
 
@@ -61,6 +61,7 @@ export function ViewPedidos() {
         </div>
         <select value={filtroStatus} onChange={e=>setFiltroStatus(e.target.value)} className="bg-surface border border-border px-4 py-3 rounded-xl shadow-sm outline-none focus:border-primary font-medium min-w-[150px]">
           <option value="todos">Todos os Status</option>
+          <option value="agendados">Somente Agendados</option>
           <option value="pendente">Pendentes</option>
           <option value="confirmado">Confirmados</option>
           <option value="entregue">Entregues</option>
@@ -101,7 +102,7 @@ export function ViewPedidos() {
                             {format(parseISO(p.created_at), "HH:mm")}
                           </td>
                           <td className="p-4">
-                            <p className="font-bold text-foreground">{p.cliente_nome}</p>
+                            <p className="font-bold text-foreground flex items-center gap-2">{p.cliente_nome} {p.agendado && <span className="bg-amber-100 text-amber-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full flex items-center gap-1"><CalendarClock size={10}/> Agendamento</span>}</p>
                             <p className="text-sm text-muted-foreground mt-0.5">{p.cliente_whatsapp}</p>
                           </td>
                           <td className="p-4 text-sm text-muted-foreground">

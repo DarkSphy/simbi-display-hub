@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -25,6 +25,8 @@ export type Database = {
           horario: string
           id: string
           logo_url: string | null
+          horarios_funcionamento: any | null
+          permitir_agendamento: boolean | null
           nome: string
           publicado: boolean
           slug: string
@@ -41,6 +43,8 @@ export type Database = {
           horario?: string
           id?: string
           logo_url?: string | null
+          horarios_funcionamento?: any | null
+          permitir_agendamento?: boolean | null
           nome?: string
           publicado?: boolean
           slug: string
@@ -57,6 +61,8 @@ export type Database = {
           horario?: string
           id?: string
           logo_url?: string | null
+          horarios_funcionamento?: any | null
+          permitir_agendamento?: boolean | null
           nome?: string
           publicado?: boolean
           slug?: string
@@ -70,6 +76,8 @@ export type Database = {
           cor_principal: string | null
           id: string
           logo_url: string | null
+          horarios_funcionamento: any | null
+          permitir_agendamento: boolean | null
           mensagem_rodape: string | null
           nome_loja: string
           whatsapp: string
@@ -78,6 +86,8 @@ export type Database = {
           cor_principal?: string | null
           id?: string
           logo_url?: string | null
+          horarios_funcionamento?: any | null
+          permitir_agendamento?: boolean | null
           mensagem_rodape?: string | null
           nome_loja?: string
           whatsapp?: string
@@ -86,6 +96,8 @@ export type Database = {
           cor_principal?: string | null
           id?: string
           logo_url?: string | null
+          horarios_funcionamento?: any | null
+          permitir_agendamento?: boolean | null
           mensagem_rodape?: string | null
           nome_loja?: string
           whatsapp?: string
@@ -101,6 +113,7 @@ export type Database = {
           created_at: string
           id: string
           itens: Json
+          agendado: boolean | null
           status: string
           total: number
         }
@@ -112,6 +125,7 @@ export type Database = {
           created_at?: string
           id?: string
           itens: Json
+          agendado: boolean | null
           status?: string
           total: number
         }
@@ -123,6 +137,7 @@ export type Database = {
           created_at?: string
           id?: string
           itens?: Json
+          agendado?: boolean | null
           status?: string
           total?: number
         }

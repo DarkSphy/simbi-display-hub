@@ -1,7 +1,7 @@
 ﻿import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { ShoppingBag, Search, ExternalLink, Menu, X, MessageCircle, ChevronLeft, ChevronRight, Info, Minus, Plus, Package, Weight } from "lucide-react";
+import { ShoppingBag, Search, ExternalLink, Menu, X, MessageCircle, ChevronLeft, ChevronRight, Info, Minus, Plus, Package, Weight, Clock, CalendarClock } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useCart } from "@/contexts/CartContext";
@@ -224,7 +224,32 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
             </div>
           )}
           <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-display font-bold">{catalogo.nome}</h1>
+            <div className="flex flex-col md:flex-row items-center md:items-end gap-3 mb-2">
+              <h1 className="text-3xl md:text-4xl font-display font-bold">{catalogo.nome}</h1>
+              {(() => {
+                let isOpen = true;
+                if (catalogo.horarios_funcionamento) {
+                  const hoje = new Date();
+                  const dia = hoje.getDay();
+                  const h = catalogo.horarios_funcionamento[dia];
+                  if (!h || !h.ativo) isOpen = false;
+                  else {
+                    const agora = hoje.getHours() * 60 + hoje.getMinutes();
+                    const [abreH, abreM] = (h.abre||'00:00').split(':').map(Number);
+                    const [fechaH, fechaM] = (h.fecha||'23:59').split(':').map(Number);
+                    const minAbre = abreH * 60 + abreM;
+                    const minFecha = fechaH * 60 + fechaM;
+                    if (minFecha < minAbre) isOpen = agora >= minAbre || agora <= minFecha;
+                    else isOpen = agora >= minAbre && agora <= minFecha;
+                  }
+                }
+                return isOpen ? (
+                  <span className="bg-sage/20 text-sage border border-sage/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-sm"><Clock size={14}/> Aberto Agora</span>
+                ) : (
+                  <span className="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 backdrop-blur-sm"><Clock size={14}/> Fechado</span>
+                );
+              })()}
+            </div>
             <p className="text-muted-foreground mt-2 max-w-xl">{catalogo.descricao}</p>
           </div>
         </div>
@@ -302,6 +327,25 @@ function Catalog({ catalogo, produtos }: { catalogo: any, produtos: any[] }) {
 }
 
 function CartDrawer({ catalogo }: { catalogo: any }) {
+  let isOpen = true;
+  if (catalogo.horarios_funcionamento) {
+    const hoje = new Date();
+    const dia = hoje.getDay();
+    const h = catalogo.horarios_funcionamento[dia];
+    if (!h || !h.ativo) isOpen = false;
+    else {
+      const agora = hoje.getHours() * 60 + hoje.getMinutes();
+      const [abreH, abreM] = (h.abre||'00:00').split(':').map(Number);
+      const [fechaH, fechaM] = (h.fecha||'23:59').split(':').map(Number);
+      const minAbre = abreH * 60 + abreM;
+      const minFecha = fechaH * 60 + fechaM;
+      if (minFecha < minAbre) isOpen = agora >= minAbre || agora <= minFecha;
+      else isOpen = agora >= minAbre && agora <= minFecha;
+    }
+  }
+
+  const isAgendamento = !isOpen && catalogo.permitir_agendamento;
+  const isBloqueado = !isOpen && !catalogo.permitir_agendamento;
   const { items, total, updateQuantity, clearCart } = useCart();
   const [open, setOpen] = useState(false);
   const [nome, setNome] = useState("");
@@ -316,11 +360,13 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
     setLoading(true);
     try {
       const { error } = await supabase.from("pedidos").insert({
+        agendado: isAgendamento,
         cliente_nome: nome, cliente_whatsapp: whatsapp, cliente_endereco: endereco, itens: items, total: total, catalogo_id: catalogo.id
       });
       if (error) throw error;
       const msgItens = items.map((item) => `- ${item.quantidade}x ${item.nome} (${moeda(Number(item.preco) * item.quantidade)})`).join("\n");
-      const mensagem = `Olá! Gostaria de fazer o seguinte pedido:\n\n${msgItens}\n\nTotal: *${moeda(total)}*\n\n*Meus dados:*\nNome: ${nome}\nWhatsApp: ${whatsapp}\nEndereço: ${endereco}`;
+      const textoIntro = isAgendamento ? 'Olá! Gostaria de AGENDAR o seguinte pedido para quando a loja abrir' : 'Olá! Gostaria de fazer o seguinte pedido';
+      const mensagem = `\:\n\n${msgItens}\n\nTotal: *${moeda(total)}*\n\n*Meus dados:*\nNome: ${nome}\nWhatsApp: ${whatsapp}\nEndereço: ${endereco}`;
       const numeroContato = String(catalogo.contato ?? "").replace(/\D/g, "");
       const url = `https://wa.me/${numeroContato}?text=${encodeURIComponent(mensagem)}`;
       clearCart(); setOpen(false); window.location.href = url;
@@ -373,8 +419,15 @@ function CartDrawer({ catalogo }: { catalogo: any }) {
                   <input required value={nome} onChange={e=>setNome(e.target.value)} placeholder="Nome Completo" className="w-full p-4 rounded-2xl bg-background border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"/>
                   <input required value={whatsapp} onChange={e=>setWhatsapp(e.target.value)} placeholder="WhatsApp" className="w-full p-4 rounded-2xl bg-background border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-mono"/>
                   <textarea required value={endereco} onChange={e=>setEndereco(e.target.value)} placeholder="Endereço de Entrega Completo" className="w-full p-4 rounded-2xl bg-background border border-border outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" rows={3}/>
-                  <button disabled={loading} type="submit" className="w-full p-5 rounded-2xl bg-primary hover:bg-brand-hover text-white font-bold flex justify-center items-center gap-3 mt-6 shadow-[0_4px_14px_rgba(0,0,0,0.2)] shadow-primary/40 transition-transform active:scale-95 disabled:opacity-50 text-lg">
-                    {loading ? "Enviando..." : <><MessageCircle size={22}/> Finalize o pedido enviando para o WhatsApp</>}
+                                    {isBloqueado ? (
+                    <div className="w-full p-5 rounded-2xl bg-secondary text-muted-foreground font-bold flex justify-center items-center gap-3 mt-6 border border-border">
+                      <Clock size={22}/> A Loja está fechada no momento
+                    </div>
+                  ) : (
+                  <button disabled={loading} type="submit" className={w-full p-5 rounded-2xl text-white font-bold flex justify-center items-center gap-3 mt-6 shadow-[0_4px_14px_rgba(0,0,0,0.2)] transition-transform active:scale-95 disabled:opacity-50 text-lg \}>
+                    {loading ? "Enviando..." : isAgendamento ? <><CalendarClock size={22}/> Agendar via WhatsApp</> : <><MessageCircle size={22}/> Finalize o pedido enviando para o WhatsApp</>}
+                  </button>
+                  )}
                   </button>
                 </form>
               </div>

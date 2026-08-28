@@ -1,6 +1,6 @@
 ﻿import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { Store, ShoppingBag, Clock, Users, Target } from "lucide-react";
+import { Store, ShoppingBag, Clock, Users, Target, CalendarClock } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 
@@ -11,6 +11,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
   
   const total = pedidos.reduce((acc, p) => p.status !== 'cancelado' ? acc + Number(p.total) : acc, 0);
   const pendentes = pedidos.filter(p => p.status === 'pendente').length;
+  const agendados = pedidos.filter(p => p.agendado).length;
 
   const chartData = useMemo(() => {
     if (pedidos.length === 0) return [
@@ -55,7 +56,7 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="bg-surface border border-border rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
           <div className="absolute -right-6 -top-6 text-primary/5 group-hover:scale-110 transition-transform"><Store size={100}/></div>
           <div className="flex items-center gap-4 mb-4 relative z-10">
