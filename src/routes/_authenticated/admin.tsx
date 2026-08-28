@@ -30,6 +30,8 @@ function AdminLayout() {
     else document.documentElement.classList.remove('dark');
   }, [isDark]);
 
+  const queryClient = useQueryClient();
+
   const { data: session } = useQuery({
     queryKey: ["session"],
     queryFn: async () => {
