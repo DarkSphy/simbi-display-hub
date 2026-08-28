@@ -40,22 +40,21 @@ function AdminLayout() {
     } catch(e) {}
   }, []);
 
-  const handleZoom = useCallback((change: number) => {
-    setZoom(prev => {
-      let next = prev + change;
-      if (next < 20) next = 20;
-      if (next > 200) next = 200;
-      // We schedule the side effect OUTSIDE the updater by doing it asynchronously
-      // or we can just rely on useEffect, but direct is fine if we defer it.
-      setTimeout(() => {
-        try {
-          localStorage.setItem('simbi_zoom', next.toString());
-          document.documentElement.style.fontSize = `${(next / 100) * 16}px`;
-        } catch(e) {}
-      }, 0);
-      return next;
-    });
-  }, []);
+  const handleZoom = (change: number) => {
+    let next = zoom + change;
+    if (next < 20) next = 20;
+    if (next > 200) next = 200;
+    setZoom(next);
+    
+    // Garantia absoluta de atualização visual na tela (nuclear bypass)
+    const span = document.getElementById('zoom-display-text');
+    if (span) span.innerText = next + '%';
+
+    try {
+      localStorage.setItem('simbi_zoom', next.toString());
+      document.documentElement.style.fontSize = `${(next / 100) * 16}px`;
+    } catch(e) {}
+  };
 
   const toggleTheme = useCallback(() => {
     setTheme(prev => {
@@ -156,7 +155,7 @@ function AdminLayout() {
           <div className="flex items-center gap-2 bg-background border border-border px-3 py-1.5 rounded-xl shadow-sm">
             <span className="text-sm font-semibold text-muted-foreground mr-1 hidden sm:inline">Zoom:</span>
             <button onClick={() => handleZoom(-10)} className="p-1.5 text-muted-foreground hover:bg-secondary rounded-lg"><ZoomOut size={18}/></button>
-            <span className="text-sm font-bold font-mono w-10 text-center text-primary">{zoom}%</span>
+            <span id="zoom-display-text" className="text-sm font-bold font-mono w-10 text-center text-primary">{zoom}%</span>
             <button onClick={() => handleZoom(10)} className="p-1.5 text-muted-foreground hover:bg-secondary rounded-lg"><ZoomIn size={18}/></button>
           </div>
           <button onClick={toggleTheme} className="flex items-center gap-2 bg-background border border-border px-4 py-2 rounded-xl shadow-sm text-sm font-bold text-muted-foreground hover:text-foreground">
