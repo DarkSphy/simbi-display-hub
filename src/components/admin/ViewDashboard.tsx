@@ -1,8 +1,8 @@
 ﻿import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Store, ShoppingBag, Clock, Users, Target } from "lucide-react";
 import { listarPedidos } from "@/lib/pedidos.functions";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 
 const moeda = (valor: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(valor);
 
@@ -56,6 +56,26 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
     ];
   }, [pedidos]);
 
+  // Custom Resize Observer to bypass Recharts crash
+  const containerArea = useRef<HTMLDivElement>(null);
+  const containerPie = useRef<HTMLDivElement>(null);
+  const [areaWidth, setAreaWidth] = useState(600);
+  const [pieWidth, setPieWidth] = useState(300);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      window.requestAnimationFrame(() => {
+        for (const entry of entries) {
+          if (entry.target === containerArea.current) setAreaWidth(Math.max(300, entry.contentRect.width));
+          if (entry.target === containerPie.current) setPieWidth(Math.max(200, entry.contentRect.width));
+        }
+      });
+    });
+    if (containerArea.current) resizeObserver.observe(containerArea.current);
+    if (containerPie.current) resizeObserver.observe(containerPie.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
   return (
     <div className="space-y-6 pb-12 w-full">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
@@ -107,49 +127,45 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-surface border border-border rounded-3xl p-8 shadow-sm">
           <h3 className="font-bold text-xl mb-6">Desempenho de Vendas (7 Dias)</h3>
-          <div className="h-[300px] w-full block">
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} tickFormatter={(value) => `R$ ${value}`} dx={-10}/>
-                <Tooltip 
-                  contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                  itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
-                  formatter={(value: any) => [moeda(Number(value)), 'Vendas']}
-                />
-                <Area type="monotone" dataKey="vendas" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorVendas)" />
-              </AreaChart>
-            </ResponsiveContainer>
+          <div ref={containerArea} className="w-full relative min-h-[300px]">
+            <AreaChart width={areaWidth} height={300} data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="colorVendas" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} dy={10} />
+              <YAxis axisLine={false} tickLine={false} tick={{fill: 'var(--muted-foreground)', fontSize: 12}} tickFormatter={(value) => `R$ ${value}`} dx={-10}/>
+              <Tooltip 
+                contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+                formatter={(value: any) => [moeda(Number(value)), 'Vendas']}
+              />
+              <Area type="monotone" dataKey="vendas" stroke="var(--primary)" strokeWidth={3} fillOpacity={1} fill="url(#colorVendas)" />
+            </AreaChart>
           </div>
         </div>
 
         <div className="bg-surface border border-border rounded-3xl p-8 shadow-sm">
           <h3 className="font-bold text-xl mb-6">Novos vs Recorrentes</h3>
-          <div className="h-[300px] w-full block">
+          <div ref={containerPie} className="w-full flex flex-col items-center relative min-h-[300px]">
             {pedidos.length === 0 ? (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
             ) : (
               <>
-                <ResponsiveContainer width="100%" height={220}>
-                  <PieChart>
-                    <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value" nameKey="name">
-                      {clientsData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                      itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                <PieChart width={pieWidth} height={220}>
+                  <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={5} dataKey="value" nameKey="name">
+                    {clientsData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--surface)', borderRadius: '12px', border: '1px solid var(--border)', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                    itemStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+                  />
+                </PieChart>
                 <div className="flex justify-center gap-8 mt-2">
                   {clientsData.map(c => (
                     <div key={c.name} className="flex items-center gap-2 bg-secondary/50 px-4 py-2 rounded-xl">
