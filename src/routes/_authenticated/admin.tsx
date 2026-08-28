@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { LogOut, LayoutDashboard, ShoppingBag, Users, Settings, PackageOpen, Store, ExternalLink, ZoomIn, ZoomOut, Moon, Sun } from "lucide-react";
