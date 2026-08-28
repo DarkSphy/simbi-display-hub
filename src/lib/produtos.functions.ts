@@ -54,7 +54,7 @@ export const listarCatalogoPorSlug = createServerFn({ method: "GET" })
 
     const { data: produtos, error } = await supabasePublic
       .from("produtos")
-      .select("id, nome, descricao, categoria, preco, medida, imagem_url, disponivel, destaque, ordem")
+      .select("id, nome, descricao, categoria, preco, medida, imagem_url, disponivel, destaque, ordem, galeria, modo_preparo")
       .eq("catalogo_id", catalogo.id)
       .eq("visivel", true)
       .order("ordem", { ascending: true })
