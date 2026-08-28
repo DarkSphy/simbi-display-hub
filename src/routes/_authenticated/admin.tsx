@@ -41,7 +41,7 @@ function MultipleImageUpload({ label, values, onChange }: { label: string, value
       const newUrls = await Promise.all(files.map(f => uploadImagem(f)));
       onChange([...(values || []), ...newUrls]);
     } catch (err) {
-      alert("Erro ao fazer upload das imagens.");
+      alert("ERRO SUPABASE MULTIPLO: " + JSON.stringify(err) + " - " + (err.message || ""));
     } finally {
       setLoading(false);
     }
@@ -85,7 +85,7 @@ function ImageUpload({ label, value, onChange }: { label: string, value: string,
       const url = await uploadImagem(file);
       onChange(url);
     } catch (err) {
-      alert("Erro ao fazer upload da imagem. Certifique-se de que configurou o Storage no Supabase.");
+      alert("ERRO SUPABASE: " + JSON.stringify(err) + " - " + (err.message || ""));
     } finally {
       setLoading(false);
     }
