@@ -117,10 +117,10 @@ function AdminWorkspace() {
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <form onSubmit={criarCatalogo} className="w-full max-w-md bg-surface border border-border rounded-3xl p-8 shadow-soft">
           <div className="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6"><Store /></div>
-          <h1 className="font-display text-3xl font-bold mb-2">Crie seu EspaÃ§o</h1>
-          <p className="text-muted-foreground mb-6">Qual serÃ¡ o nome da sua loja ou catÃ¡logo?</p>
+          <h1 className="font-display text-3xl font-bold mb-2">Crie seu Espaço</h1>
+          <p className="text-muted-foreground mb-6">Qual será o nome da sua loja ou catálogo?</p>
           <input name="nome" required placeholder="Ex: Doce Sabor" className="w-full bg-background border border-border rounded-xl px-4 py-3 outline-none focus:border-primary focus:ring-1 focus:ring-primary mb-4" />
-          <button type="submit" className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-brand-hover transition-colors">Criar CatÃ¡logo</button>
+          <button type="submit" className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-brand-hover transition-colors">Criar Catálogo</button>
         </form>
       </div>
     );
@@ -143,7 +143,7 @@ function AdminWorkspace() {
         </div>
 
         <div className="p-4 flex-1 overflow-y-auto">
-          <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-2">EspaÃ§o de Trabalho</div>
+          <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-2">Espaço de Trabalho</div>
           <nav className="space-y-1">
             <SidebarItem active={activeTab === 'dashboard'} icon={<LayoutDashboard size={18}/>} label="Dashboard" onClick={() => {setActiveTab('dashboard'); setMobileMenu(false)}} />
             <SidebarItem active={activeTab === 'pedidos'} icon={<ShoppingBag size={18}/>} label="Pedidos" onClick={() => {setActiveTab('pedidos'); setMobileMenu(false)}} />
@@ -153,7 +153,7 @@ function AdminWorkspace() {
 
           <div className="mt-8 text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3 px-2">Ajustes</div>
           <nav className="space-y-1">
-            <SidebarItem active={activeTab === 'configuracoes'} icon={<Settings size={18}/>} label="ConfiguraÃ§Ãµes" onClick={() => {setActiveTab('configuracoes'); setMobileMenu(false)}} />
+            <SidebarItem active={activeTab === 'configuracoes'} icon={<Settings size={18}/>} label="Configurações" onClick={() => {setActiveTab('configuracoes'); setMobileMenu(false)}} />
           </nav>
         </div>
 
@@ -221,13 +221,13 @@ function ViewDashboard({ linkPublico }: { linkPublico: string }) {
   const total = pedidos.reduce((acc, p) => p.status !== 'cancelado' ? acc + Number(p.total) : acc, 0);
   const pendentes = pedidos.filter(p => p.status === 'pendente').length;
 
-  // Gerar dados mockados (mas baseados em dias recentes) para o GrÃ¡fico Animado
+  // Gerar dados mockados (mas baseados em dias recentes) para o Gráfico Animado
   const chartData = useMemo(() => {
     if (pedidos.length === 0) return [
       { name: 'Seg', vendas: 0 }, { name: 'Ter', vendas: 0 }, { name: 'Qua', vendas: 0 },
-      { name: 'Qui', vendas: 0 }, { name: 'Sex', vendas: 0 }, { name: 'SÃ¡b', vendas: 0 }, { name: 'Dom', vendas: 0 }
+      { name: 'Qui', vendas: 0 }, { name: 'Sex', vendas: 0 }, { name: 'Sáb', vendas: 0 }, { name: 'Dom', vendas: 0 }
     ];
-    // Agrupamento real simples (apenas para exibiÃ§Ã£o)
+    // Agrupamento real simples (apenas para exibição)
     const d = new Date();
     return [
       { name: 'Dia -4', vendas: Math.floor(Math.random() * total * 0.2) },
@@ -387,7 +387,7 @@ function ViewClientes() {
     <div className="space-y-6">
       <header className="mb-6">
         <h2 className="font-display text-3xl font-bold">Clientes</h2>
-        <p className="text-muted-foreground mt-1">Sua base de dados de compradores fiÃ©is.</p>
+        <p className="text-muted-foreground mt-1">Sua base de dados de compradores fiéis.</p>
       </header>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {clientes.length === 0 && <p className="col-span-full text-muted-foreground">Nenhum cliente registrado.</p>}
@@ -431,7 +431,7 @@ function ViewProdutos({ catalogo }: { catalogo: Catalogo }) {
   return (
     <div className="space-y-6">
       <header className="flex justify-between items-end mb-6">
-        <div><h2 className="font-display text-3xl font-bold">Produtos</h2><p className="text-muted-foreground mt-1">Gerencie o seu catÃ¡logo pÃºblico.</p></div>
+        <div><h2 className="font-display text-3xl font-bold">Produtos</h2><p className="text-muted-foreground mt-1">Gerencie o seu catálogo pÃºblico.</p></div>
         <button onClick={() => setForm({nome:'', descricao:'', preco:0, categoria:'', visivel:true, disponivel:true, imagem_url:''})} className="bg-primary text-white px-4 py-2.5 rounded-xl font-bold hover:bg-brand-hover flex items-center gap-2 shadow-sm"><Plus size={18}/> Novo Produto</button>
       </header>
 
@@ -442,10 +442,10 @@ function ViewProdutos({ catalogo }: { catalogo: Catalogo }) {
           <div className="grid grid-cols-2 gap-4">
             <label className="col-span-2 md:col-span-1 block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Nome do Produto</span><input required value={form.nome} onChange={e=>setForm({...form,nome:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
             <label className="col-span-2 md:col-span-1 block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Categoria</span><input required value={form.categoria} onChange={e=>setForm({...form,categoria:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
-            <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">PreÃ§o (R$)</span><input required type="number" step="0.01" value={form.preco} onChange={e=>setForm({...form,preco:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
+            <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Preço (R$)</span><input required type="number" step="0.01" value={form.preco} onChange={e=>setForm({...form,preco:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
             <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Medida (Ex: 1kg)</span><input required value={form.medida || ''} onChange={e=>setForm({...form,medida:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
             
-            <label className="col-span-2 block"><span className="text-sm font-bold text-muted-foreground mb-1 block">DescriÃ§Ã£o</span><textarea value={form.descricao||''} onChange={e=>setForm({...form,descricao:e.target.value})} rows={3} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
+            <label className="col-span-2 block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Descrição</span><textarea value={form.descricao||''} onChange={e=>setForm({...form,descricao:e.target.value})} rows={3} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
             
             <div className="col-span-2">
               <ImageUpload label="Foto do Produto (Opcional)" value={form.imagem_url} onChange={(url) => setForm({...form, imagem_url: url})} />
@@ -488,20 +488,20 @@ function ViewConfiguracoes({ catalogo, form, setForm, reload }: any) {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <header className="mb-6"><h2 className="font-display text-3xl font-bold">ConfiguraÃ§Ãµes</h2><p className="text-muted-foreground mt-1">Identidade e contatos da sua loja.</p></header>
+      <header className="mb-6"><h2 className="font-display text-3xl font-bold">Configurações</h2><p className="text-muted-foreground mt-1">Identidade e contatos da sua loja.</p></header>
       <form onSubmit={salvar} className="bg-surface border border-border p-8 rounded-3xl shadow-sm space-y-6">
         
         <div className="grid grid-cols-2 gap-6 mb-6 pb-6 border-b border-border">
           <ImageUpload label="Logo da Loja (Recomendado: 400x400px)" value={form?.logo_url} onChange={(url) => setForm({...form, logo_url: url})} />
-          <ImageUpload label="Capa do CatÃ¡logo" value={form?.capa_url} onChange={(url) => setForm({...form, capa_url: url})} />
+          <ImageUpload label="Capa do Catálogo" value={form?.capa_url} onChange={(url) => setForm({...form, capa_url: url})} />
         </div>
 
-        <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Nome do CatÃ¡logo</span><input required value={form?.nome||''} onChange={e=>setForm({...form,nome:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
+        <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Nome do Catálogo</span><input required value={form?.nome||''} onChange={e=>setForm({...form,nome:e.target.value})} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
         <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">WhatsApp para Pedidos</span><input required value={form?.contato||''} onChange={e=>setForm({...form,contato:e.target.value})} placeholder="5511999999999" className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
-        <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">DescriÃ§Ã£o</span><textarea value={form?.descricao||''} onChange={e=>setForm({...form,descricao:e.target.value})} rows={3} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
+        <label className="block"><span className="text-sm font-bold text-muted-foreground mb-1 block">Descrição</span><textarea value={form?.descricao||''} onChange={e=>setForm({...form,descricao:e.target.value})} rows={3} className="w-full border rounded-xl p-3 outline-none focus:border-primary"/></label>
         
         <button disabled={salvando} type="submit" className="bg-primary text-white px-6 py-3.5 rounded-xl font-bold hover:bg-brand-hover w-full shadow-sm">
-          {salvando ? "Salvando..." : "Salvar AlteraÃ§Ãµes"}
+          {salvando ? "Salvando..." : "Salvar Alterações"}
         </button>
       </form>
     </div>
