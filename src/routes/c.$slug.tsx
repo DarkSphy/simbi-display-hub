@@ -1,4 +1,4 @@
-﻿import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ShoppingBag, Search, ExternalLink, Menu, X, MessageCircle, ChevronLeft, ChevronRight, Info, Minus, Plus, Package, Weight, Clock, CalendarClock } from "lucide-react";
