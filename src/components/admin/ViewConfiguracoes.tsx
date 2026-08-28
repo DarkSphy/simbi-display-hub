@@ -40,7 +40,11 @@ function ImageUpload({ label, value, onChange }: { label: string, value: string,
 
 export function ViewConfiguracoes({ catalogo, reload }: any) {
   const [salvando, setSalvando] = useState(false);
-  const [form, setForm] = useState<any>(() => ({ ...catalogo }));
+  const [form, setForm] = useState<any>(() => {
+    const padrao: any = {};
+    for (let i = 0; i < 7; i++) padrao[i] = { ativo: true, abre: '18:00', fecha: '23:00' };
+    return { ...catalogo, horarios_funcionamento: catalogo?.horarios_funcionamento ?? padrao };
+  });
 
   const salvar = async (e: React.FormEvent) => {
     e.preventDefault(); setSalvando(true);
