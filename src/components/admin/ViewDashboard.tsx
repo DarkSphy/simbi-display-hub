@@ -125,7 +125,22 @@ export function ViewDashboard({ linkPublico }: { linkPublico: string }) {
                 <div className="w-full h-full flex items-center justify-center text-muted-foreground font-medium">Sem dados ainda</div>
               ) : (
                 <PieChart>
-                  <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value" nameKey="name" label={({ name, value }) => `${value}`}>
+                  <Pie data={clientsData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={5} dataKey="value" nameKey="name" 
+                    label={(props: any) => {
+                      const { cx, cy, midAngle, innerRadius, outerRadius, value } = props;
+                      if (!value) return null;
+                      const RADIAN = Math.PI / 180;
+                      const radius = innerRadius + (outerRadius - innerRadius) * 0.65;
+                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                      return (
+                        <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontWeight="900" fontSize="22" filter="drop-shadow(0px 2px 2px rgba(0,0,0,0.3))">
+                          {value}
+                        </text>
+                      );
+                    }}
+                    labelLine={false}
+                  >
                     {clientsData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}

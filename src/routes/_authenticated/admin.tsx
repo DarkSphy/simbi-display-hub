@@ -114,17 +114,6 @@ function AdminLayout() {
           })}
         </nav>
 
-        <div className="px-4 py-3 flex items-center justify-between border-t border-border">
-          <div className="flex items-center gap-1">
-            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setZoomPercent(Math.max(70, zoomPercent - 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Reduzir Zoom"><ZoomOut size={18}/></button>
-            <span className="text-xs font-bold font-mono w-9 text-center text-muted-foreground">{zoomPercent}%</span>
-            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setZoomPercent(Math.min(130, zoomPercent + 10)); }} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Aumentar Zoom"><ZoomIn size={18}/></button>
-          </div>
-          <div className="w-px h-4 bg-border mx-1"></div>
-          <button onClick={() => setIsDark(!isDark)} className="p-2 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors" title="Alternar Tema">
-            {isDark ? <Sun size={18}/> : <Moon size={18}/>}
-          </button>
-        </div>
         <div className="p-4 border-t border-border mt-auto">
           <a href={linkPublico} target="_blank" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-muted-foreground hover:bg-secondary hover:text-foreground transition-all font-semibold w-full">
             <ExternalLink size={20} className="opacity-70" />
@@ -137,8 +126,22 @@ function AdminLayout() {
         </div>
       </aside>
 
-      <main className="flex-1 md:ml-64 p-4 sm:p-8 md:p-12 overflow-x-hidden">
-        <div className="max-w-6xl mx-auto">
+      <main className="flex-1 md:ml-64 flex flex-col min-h-screen">
+        <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border p-4 flex flex-wrap justify-end items-center gap-4">
+          <div className="flex items-center gap-3 bg-surface border border-border px-4 py-2 rounded-2xl shadow-sm">
+            <span className="text-sm font-semibold text-muted-foreground mr-1">Zoom:</span>
+            <button type="button" onClick={() => setZoomPercent(Math.max(70, zoomPercent - 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomOut size={18}/></button>
+            <span className="text-sm font-bold font-mono w-10 text-center text-primary">{zoomPercent}%</span>
+            <button type="button" onClick={() => setZoomPercent(Math.min(130, zoomPercent + 10))} className="p-1.5 text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors"><ZoomIn size={18}/></button>
+          </div>
+          <button onClick={() => setIsDark(!isDark)} className="flex items-center gap-2 bg-surface border border-border px-4 py-2.5 rounded-2xl shadow-sm text-sm font-bold text-muted-foreground hover:text-foreground transition-all">
+            {isDark ? <Sun size={18} className="text-amber-500"/> : <Moon size={18} className="text-primary"/>}
+            {isDark ? 'Modo Claro' : 'Modo Escuro'}
+          </button>
+        </header>
+
+        <div className="p-4 sm:p-8 md:p-12 flex-1">
+          <div className="max-w-6xl mx-auto">
           {activeTab === 'painel' && <ViewDashboard linkPublico={linkPublico} />}
           {activeTab === 'pedidos' && <ViewPedidos />}
           {activeTab === 'produtos' && <ViewProdutos catalogo={catalogo} />}
